@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="21dp"
+        android:text="Attendance" />
+
+    <Button
+        android:id="@+id/button9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Close Attendance"
+        android:layout_below="@+id/textView22"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="38dp" />
+
+    <TextView
+        android:id="@+id/textView21"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Confirmation Code"
+        android:layout_marginTop="66dp"
+        android:layout_below="@+id/textView26"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/textView22"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView21"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:text="0G34Ht" />
+
+    <TextView
+        android:id="@+id/textView25"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView20"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:text="Started at 8:55 A.M. For DPS 924 Android." />
+
+    <TextView
+        android:id="@+id/textView26"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView25"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="46dp"
+        android:text="Sending out Attendance Messages......." />
+</RelativeLayout>

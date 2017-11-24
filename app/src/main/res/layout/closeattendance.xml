@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView28"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="11dp"
+        android:text="Attendance Results"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/textView29"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="21dp"
+        android:text="DPS 924 Android"
+        android:layout_below="@+id/textView28"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/textView35"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textView29"
+        android:layout_marginTop="39dp"
+        android:text="John Doe"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/textView36"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Mary Smith"
+        android:textSize="24sp"
+        android:layout_below="@+id/textView35"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="32dp" />
+
+    <TextView
+        android:id="@+id/textView37"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textView36"
+        android:layout_marginTop="35dp"
+        android:text="Anne Williams"
+        android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/button10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="17dp"
+        android:text="Close Attendance"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/button11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save Changes"
+        android:layout_above="@+id/button10"
+        android:layout_alignStart="@+id/textView28"
+        android:layout_marginBottom="30dp" />
+
+    <ImageButton
+        android:id="@+id/imageButton4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/check"
+        android:layout_alignTop="@+id/textView35"
+        android:layout_toStartOf="@+id/imageButton5" />
+
+    <ImageButton
+        android:id="@+id/imageButton5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:drawable/btn_dialog"
+        android:layout_marginStart="16dp"
+        android:layout_alignTop="@+id/textView35"
+        android:layout_toEndOf="@+id/button11" />
+
+    <ImageButton
+        android:id="@+id/imageButton7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/textView36"
+        android:layout_toStartOf="@+id/imageButton5"
+        app:srcCompat="@drawable/badcheck" />
+
+    <ImageButton
+        android:id="@+id/imageButton8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/imageButton5"
+        android:layout_alignTop="@+id/textView36"
+        app:srcCompat="@android:drawable/ic_delete" />
+
+    <ImageButton
+        android:id="@+id/imageButton9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textView37"
+        android:layout_alignStart="@+id/imageButton7"
+        app:srcCompat="@drawable/check" />
+
+    <ImageButton
+        android:id="@+id/imageButton10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/imageButton8"
+        android:layout_alignTop="@+id/textView37"
+        app:srcCompat="@android:drawable/btn_dialog" />
+
+</RelativeLayout>
