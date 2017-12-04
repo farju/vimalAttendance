@@ -1,5 +1,6 @@
 package com.example.vimal.projectproposal;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +18,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class RegistrationActivity extends AppCompatActivity implements View.OnClickListener {
     private FirebaseAuth mAuth;
@@ -28,6 +31,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     private RadioGroup radioGroup;
     private TextView mStatusTextView;
     private String AccountType;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +39,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         setContentView(R.layout.activity_registration);
 
         mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         mStatusTextView = (TextView) findViewById(R.id.status);
         mUserNameField = (EditText) findViewById(R.id.UsernameInput);
@@ -87,7 +92,24 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("createuserSuccess", "createUserWithUsername:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            User userObject = new User(mEmailField.getText().toString(), mFirstNameField.getText().toString(), mLastNameField.getText().toString(), AccountType);
+                            String userId = user.getUid();
+                            try {
+                                mDatabase.child("users").child(userId).setValue(userObject);
+                            } catch (Exception e) {
+                                Log.e("bad news", e.toString());
+                            }
+                            if (AccountType.equals("Student")) {
+                                //Have to add this intent and havent set up student activity
+                                //Intent registrationIntent (this, )
+                            } else {
+                                Intent registationIntent = new Intent(RegistrationActivity.this, TeacherInitialScreen.class);
+                                registationIntent.putExtra("UID", userId);
+                                startActivity(registationIntent);
+                            }
                             updateUI(user);
+
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("createuserFailed", "createUserWithEmail:failure", task.getException());
@@ -129,22 +151,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     private void updateUI(FirebaseUser user) {
         //hideProgressDialog();
         if (user != null) {
-            mStatusTextView.setText(getString(R.string.emailpassword_status_fmt,
-                    user.getEmail(), user.isEmailVerified()));
-            //mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
-
-            //findViewById(R.id.usernamePasswordLogin).setVisibility(View.GONE);
-            //findViewById(R.id.email_password_fields).setVisibility(View.GONE);
-            //findViewById(R.id.signed_in_buttons).setVisibility(View.VISIBLE);
-
-            //findViewById(R.id.verify_email_button).setEnabled(!user.isEmailVerified());
-        } else {
-            //mStatusTextView.setText(R.string.signed_out);
-            //mDetailTextView.setText(null);
-
-            //findViewById(R.id.usernamePasswordLogin).setVisibility(View.VISIBLE);
-            //findViewById(R.id.email_password_fields).setVisibility(View.VISIBLE);
-            //findViewById(R.id.signed_in_buttons).setVisibility(View.GONE);
+            mStatusTextView.setText("WHATSUP!!");
         }
     }
 

@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             Log.d("signInSuccess", "signInWithUsername:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("signInFail", "signInWithEmail:failure", task.getException());
@@ -158,22 +159,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void updateUI(FirebaseUser user) {
         //hideProgressDialog();
         if (user != null) {
-            mStatusTextView.setText(getString(R.string.emailpassword_status_fmt,
-                    user.getEmail(), user.isEmailVerified()));
-            //mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
-
-            findViewById(R.id.usernamePasswordLogin).setVisibility(View.GONE);
-            //findViewById(R.id.email_password_fields).setVisibility(View.GONE);
-            //findViewById(R.id.signed_in_buttons).setVisibility(View.VISIBLE);
-
-            //findViewById(R.id.verify_email_button).setEnabled(!user.isEmailVerified());
+            mStatusTextView.setText("YOU MADE IT!!");
+            /*
+            Intent loginIntent = new Intent(this, TeacherInitialScreen.class);
+            //package token/uid into intent and send it with setExtra method
+            loginIntent.putExtra("UID", user.getUid());
+            startActivity(loginIntent);
+            */
         } else {
-            //mStatusTextView.setText(R.string.signed_out);
-            //mDetailTextView.setText(null);
-
             findViewById(R.id.usernamePasswordLogin).setVisibility(View.VISIBLE);
-            //findViewById(R.id.email_password_fields).setVisibility(View.VISIBLE);
-            //findViewById(R.id.signed_in_buttons).setVisibility(View.GONE);
         }
     }
 

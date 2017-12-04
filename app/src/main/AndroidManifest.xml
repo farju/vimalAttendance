@@ -18,6 +18,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".RegistrationActivity"/>
+        <activity android:name=".TeacherInitialScreen"/>
     </application>
 
 </manifest>
