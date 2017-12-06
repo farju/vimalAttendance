@@ -19,6 +19,7 @@
         </activity>
         <activity android:name=".RegistrationActivity"/>
         <activity android:name=".TeacherInitialScreen"/>
+        <activity android:name=".TeacherAddClass"/>
     </application>
 
 </manifest>

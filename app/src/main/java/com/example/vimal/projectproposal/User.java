@@ -14,11 +14,14 @@ public class User implements Serializable{
     private String type;
     private List<Class> classList;
 
+    private User() {}
+
     public User(String Email, String first, String last, String Type) {
         last_name = last;
         first_name = first;
         email = Email;
         type = Type;
+        classList = null;
     }
 
     public String getLast_name() {
@@ -32,5 +35,8 @@ public class User implements Serializable{
     }
     public String getType() {
         return type;
+    }
+    public List<Class> getClassList() {
+        return classList;
     }
 }

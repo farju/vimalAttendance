@@ -13,4 +13,8 @@ public class Class {
     private List<User> studentList;
     private User teacher;
     //potentially add the attendance set in case I goofed up
+
+    public String getCourse_code() {
+        return course_code;
+    }
 }
