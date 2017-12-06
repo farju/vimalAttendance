@@ -3,10 +3,22 @@ package com.example.vimal.projectproposal;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 /**
  * Created by Vimal on 12/6/2017.
@@ -14,9 +26,28 @@ import com.google.firebase.auth.FirebaseAuth;
 
 //This class is used to render the class creation screen for teachers
 public class TeacherAddClass extends AppCompatActivity {
+    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.firsttimeteacher);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        final String UID = (String) getIntent().getSerializableExtra("UID");
+        Log.d("hello", UID);
+
+        Class class_ = new Class(UID);
+
+        try {
+            mDatabase.child("classes").child("10242").setValue(class_); //GENERATE RANDOM STRING ID FOR CLASSES IN CONSTRUCTOR
+            mDatabase.child("classes").child("10241").setValue(class_);
+            updateData(UID, class_.getClass_id());
+            //update teacher to add class ID to classlist
+        } catch (Exception e) {
+            Log.e("bad news", e.toString());
+        }
+
     }
 
     @Override
@@ -39,5 +70,26 @@ public class TeacherAddClass extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
 
         }
+    }
+
+    private void updateData(String UID, final String class_id) {
+        /*FirebaseDatabase.getInstance().getReference().child("users").child(UID)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    //OnDataChange uses a Datasnapshot object, that represents the user object, and allows us to parse it for the values
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        // Get user information
+                        User user = dataSnapshot.getValue(User.class);
+                        user.getClassList().add(class_id);
+                        TextView welcome = (TextView) findViewById(R.id.welcome);
+                    }
+
+                    //if the database retrieval fails then program code in here
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });*/
+
     }
 }

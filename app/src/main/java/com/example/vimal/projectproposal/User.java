@@ -1,7 +1,9 @@
 package com.example.vimal.projectproposal;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * Created by Vimal on 12/3/2017.
@@ -12,7 +14,7 @@ public class User implements Serializable{
     private String first_name;
     private String email;
     private String type;
-    private List<Class> classList;
+    private ArrayList<String> classList;
 
     private User() {}
 
@@ -21,7 +23,8 @@ public class User implements Serializable{
         first_name = first;
         email = Email;
         type = Type;
-        classList = null;
+        classList = new ArrayList<String>();
+        classList.add("empty");
     }
 
     public String getLast_name() {
@@ -36,7 +39,7 @@ public class User implements Serializable{
     public String getType() {
         return type;
     }
-    public List<Class> getClassList() {
+    public ArrayList<String> getClassList() {
         return classList;
     }
 }

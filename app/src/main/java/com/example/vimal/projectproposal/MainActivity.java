@@ -160,12 +160,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //hideProgressDialog();
         if (user != null) {
             mStatusTextView.setText("YOU MADE IT!!");
-            /*
+
             Intent loginIntent = new Intent(this, TeacherInitialScreen.class);
             //package token/uid into intent and send it with setExtra method
             loginIntent.putExtra("UID", user.getUid());
             startActivity(loginIntent);
-            */
         } else {
             findViewById(R.id.usernamePasswordLogin).setVisibility(View.VISIBLE);
         }

@@ -33,8 +33,7 @@ public class TeacherInitialScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.teacherviewclass);
         //Receive UID here
-        String UID = (String) getIntent().getSerializableExtra("UID");
-        Log.d("Hello", UID);
+        final String UID = (String) getIntent().getSerializableExtra("UID");
 
         //used for instantiating the firebase database
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -47,8 +46,9 @@ public class TeacherInitialScreen extends AppCompatActivity {
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent registerIntent = new Intent(TeacherInitialScreen.this, TeacherAddClass.class);
-                startActivity(registerIntent);
+                Intent userIntent = new Intent(TeacherInitialScreen.this, TeacherAddClass.class);
+                userIntent.putExtra("UID", UID);
+                startActivity(userIntent);
             }
         });
         //Create the Array to receive all class names and when adding to listview we hardcode the creation of a new button
@@ -102,8 +102,13 @@ public class TeacherInitialScreen extends AppCompatActivity {
                             for(int i = 0; i < user.getClassList().size(); i++) {
                                 TextView text = new TextView(TeacherInitialScreen.this);
                                 Button b = new Button(TeacherInitialScreen.this);
-                                text.setText(user.getClassList().get(i).getCourse_code());
-                                b.setText("Attendance");
+                                text.setText(user.getClassList().get(i));
+                                //if the user is a student then allow them to view class not create attendance event
+                                if (user.getType().equals("Student")) {
+                                    b.setText("View Class");
+                                } else {
+                                    b.setText("Attendance");
+                                }
                                 ll.addView(text);
                                 ll.addView(b);
                             }
