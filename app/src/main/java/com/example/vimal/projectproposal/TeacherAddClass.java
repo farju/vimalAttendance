@@ -39,14 +39,12 @@ public class TeacherAddClass extends AppCompatActivity {
         Log.d("hello", UID);
 
         Class class_ = new Class(UID);
-
+        //TODO: VALIDATE NEW CLASS INFO AND GENERATE PROOPER CLASS OBJECT FOR DB
         try {
-            String CID = mDatabase.child("classes").push().getKey();//GENERATE RANDOM STRING ID FOR CLASSES IN CONSTRUCTOR
+            String CID = mDatabase.child("classes").push().getKey(); //GENERATE RANDOM STRING ID FOR CLASSES IN CONSTRUCTOR
             mDatabase.child("classes").child(CID).setValue(class_);
-            //updateData(UID, class_.getClass_id());
-            //update teacher to add class ID to classlist
-            //mDatabase.child("users").child(UID).child("classList").push().getKey();
             mDatabase.child("users").child(UID).child("classList").push().setValue(CID);
+
             Log.d("Pushed Key", CID);
         } catch (Exception e) {
             Log.e("bad news", e.toString());
@@ -56,7 +54,9 @@ public class TeacherAddClass extends AppCompatActivity {
         added.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(TeacherAddClass.this, TeacherInitialScreen.class));
+                Intent i = new Intent(TeacherAddClass.this, TeacherInitialScreen.class);
+                i.putExtra("UID", UID);
+                startActivity(i);
             }
         });
 

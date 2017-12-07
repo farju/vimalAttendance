@@ -87,6 +87,8 @@ public class TeacherInitialScreen extends AppCompatActivity {
                         TextView welcome = (TextView) findViewById(R.id.welcome);
                         welcome.setText("Welcome " + user.getFirst_name() + " " + user.getLast_name() + " to your class list screen!");
 
+                        //TODO: READ DATA FOR EACH CID AND PULL CLASS INFORMATION
+
                         //This code is to dynamically add the classes if they exist in the classList already
                         if (user.getClassList()!=null) {
                             //Didn't test this code as yet
