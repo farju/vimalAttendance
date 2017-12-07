@@ -68,13 +68,13 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         findViewById(R.id.register).setOnClickListener(this);
     }
 
-    @Override
+/*    @Override
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
-    }
+
+    }*/
 
     //CREATION OF ACCOUNT AND HAS TO FIGURE OUT HOW TO CALL THIS IN REGISTRATION ACTIVITY.JAVA
     private void createAccount(String email, String password, String first, String last, String user, String type) {
@@ -82,50 +82,32 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         if (!validateForm()) {
             return;
         }
-
-        //showProgressDialog();
-
         // [START create_user_with_email]
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d("createuserSuccess", "createUserWithUsername:success");
+                            Log.d("Create User Success", mAuth.getCurrentUser().toString());
                             FirebaseUser user = mAuth.getCurrentUser();
                             User userObject = new User(mEmailField.getText().toString(), mFirstNameField.getText().toString(), mLastNameField.getText().toString(), AccountType);
                             String userId = user.getUid();
                             try {
                                 mDatabase.child("users").child(userId).setValue(userObject);
                             } catch (Exception e) {
-                                Log.e("bad news", e.toString());
+                                Log.e("bad DB update", e.toString());
                             }
-                            if (AccountType.equals("Student")) {
-                                //Have to add this intent and havent set up student activity
-                                //Intent registrationIntent (this, )
-                            } else {
-                                Intent registationIntent = new Intent(RegistrationActivity.this, TeacherInitialScreen.class);
-                                registationIntent.putExtra("UID", userId);
-                                startActivity(registationIntent);
-                            }
-                            updateUI(user);
-
-
+                            Intent registrationIntent = new Intent(RegistrationActivity.this, TeacherInitialScreen.class);
+                            registrationIntent.putExtra("UID", userId);
+                            startActivity(registrationIntent);
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w("createuserFailed", "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(RegistrationActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            updateUI(null);
+                            Log.w("Create User Failed", "createUserWithEmail:failure", task.getException());
+                            Toast.makeText(RegistrationActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                         }
 
-                        // [START_EXCLUDE]
-                        //hideProgressDialog();
-                        // [END_EXCLUDE]
                     }
                 });
-        // [END create_user_with_email]
     }
 
     private boolean validateForm() {
@@ -146,15 +128,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         } else {
             mPasswordField.setError(null);
         }
-
         return valid;
-    }
-
-    private void updateUI(FirebaseUser user) {
-        //hideProgressDialog();
-        if (user != null) {
-            mStatusTextView.setText("WHATSUP!!");
-        }
     }
 
     @Override
@@ -163,20 +137,8 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         int i = v.getId();
         if (i == R.id.register) {
             if (AccountType!=null) {
-                if (AccountType.equals("Teacher")) {
-                    createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString(), mFirstNameField.getText().toString(), mLastNameField.getText().toString(), mUserNameField.getText().toString(), AccountType);
-                } else if (AccountType.equals("Student")) {
-                    createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString(), mFirstNameField.getText().toString(), mLastNameField.getText().toString(), mUserNameField.getText().toString(), AccountType);
-                }
+                createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString(), mFirstNameField.getText().toString(), mLastNameField.getText().toString(), mUserNameField.getText().toString(), AccountType);
             }
-        } /*else if (i == R.id.login) {
-            signIn(mUserNameField.getText().toString(), mPasswordField.getText().toString());
-        } else if (i == R.id.sign_out_button) {
-        //Potential sign out portion
-            signOut();
-        } else if (i == R.id.verify_email_button) {
-        //Potential email verification portion
-            sendEmailVerification();
-        }*/
+        }
     }
 }

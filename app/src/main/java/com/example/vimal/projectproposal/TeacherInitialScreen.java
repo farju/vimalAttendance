@@ -54,6 +54,7 @@ public class TeacherInitialScreen extends AppCompatActivity {
         //Create the Array to receive all class names and when adding to listview we hardcode the creation of a new button
         //store teacher UID in the database when storing class objects (foreign key)
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
@@ -82,7 +83,7 @@ public class TeacherInitialScreen extends AppCompatActivity {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         // Get user information
-                        User user = dataSnapshot.getValue(User.class);
+                        User user = (User) dataSnapshot.getValue(User.class);
                         TextView welcome = (TextView) findViewById(R.id.welcome);
                         welcome.setText("Welcome " + user.getFirst_name() + " " + user.getLast_name() + " to your class list screen!");
 

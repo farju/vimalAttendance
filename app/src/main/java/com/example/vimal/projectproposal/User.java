@@ -24,7 +24,8 @@ public class User implements Serializable{
         email = Email;
         type = Type;
         classList = new ArrayList<String>();
-        classList.add("empty");
+        classList.add("first");
+        classList.add("last");
     }
 
     public String getLast_name() {

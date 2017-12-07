@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -40,13 +41,24 @@ public class TeacherAddClass extends AppCompatActivity {
         Class class_ = new Class(UID);
 
         try {
-            mDatabase.child("classes").child("10242").setValue(class_); //GENERATE RANDOM STRING ID FOR CLASSES IN CONSTRUCTOR
-            mDatabase.child("classes").child("10241").setValue(class_);
-            updateData(UID, class_.getClass_id());
+            String CID = mDatabase.child("classes").push().getKey();//GENERATE RANDOM STRING ID FOR CLASSES IN CONSTRUCTOR
+            mDatabase.child("classes").child(CID).setValue(class_);
+            //updateData(UID, class_.getClass_id());
             //update teacher to add class ID to classlist
+            //mDatabase.child("users").child(UID).child("classList").push().getKey();
+            mDatabase.child("users").child(UID).child("classList").push().setValue(CID);
+            Log.d("Pushed Key", CID);
         } catch (Exception e) {
             Log.e("bad news", e.toString());
         }
+
+        Button added = (Button) findViewById(R.id.addclass);
+        added.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(TeacherAddClass.this, TeacherInitialScreen.class));
+            }
+        });
 
     }
 

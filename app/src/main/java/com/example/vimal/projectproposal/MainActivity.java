@@ -28,78 +28,78 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //initilize connection to DB
         mAuth = FirebaseAuth.getInstance();
 
-        mStatusTextView = (TextView) findViewById(R.id.status);
+        //mStatusTextView = (TextView) findViewById(R.id.status);
         mUserNameField = (EditText) findViewById(R.id.usernameinput);
         mPasswordField = (EditText) findViewById(R.id.passwordinput);
 
+        if(mAuth.getCurrentUser() != null){
+            //valid user -> go to initial screen
+            Log.d("Current User", mAuth.getCurrentUser().toString());
+            Intent loginIntent = new Intent(this, TeacherInitialScreen.class);
+            loginIntent.putExtra("UID", mAuth.getCurrentUser().getUid());
+            Log.d("Current User", mAuth.getCurrentUser().getUid());
+            startActivity(loginIntent);
+        }else {
+            Log.d("Current User", "is empty");
+        }
         findViewById(R.id.login).setOnClickListener(this);
         //This has to be placed in either RegistrationActivity or figure out how to add register on this page
         //findViewById(R.id.email_create_account_button).setOnClickListener(this);
 
-        Button student = (Button) findViewById(R.id.register);
-        student.setOnClickListener(new View.OnClickListener() {
+        Button new_user = (Button) findViewById(R.id.register);
+        new_user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent registerIntent = new Intent(MainActivity.this, RegistrationActivity.class);
-                startActivity(registerIntent);
+                startActivity(new Intent(MainActivity.this, RegistrationActivity.class));
             }
         });
         
     }
-
+/*
     @Override
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
-    }
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        Log.d("Current User", currentUser.toString());
+        login(currentUser);
+    }*/
     // [END on_start_check_user]
 
-
+    //signs in user
     private void signIn(String email, String password) {
         Log.d("signin", "signIn:" + email);
         if (!validateForm()) {
+            //user login credentials are invalid
             return;
         }
-
-        //showProgressDialog();
-
         // [START sign_in_with_email]
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("signInSuccess", "signInWithUsername:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
+                            login(user);
 
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("signInFail", "signInWithEmail:failure", task.getException());
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            updateUI(null);
+                            Toast.makeText(MainActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            //login(null);
                         }
-
-                        // [START_EXCLUDE]
-                        if (!task.isSuccessful()) {
-                            mStatusTextView.setText(R.string.auth_failed);
-                        }
-                        //hideProgressDialog();
-                        // [END_EXCLUDE]
                     }
                 });
         // [END sign_in_with_email]
     }
-//SIGN OUT PORTION
+//SIGN OUT
     private void signOut() {
         mAuth.signOut();
-        updateUI(null);
+        //login(null);
     }
 //EMAIL VERIFICATION PORTION
     /*
@@ -134,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // [END send_email_verification]
     }
 */
+    //validates user information
     private boolean validateForm() {
         boolean valid = true;
 
@@ -156,17 +157,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return valid;
     }
 
-    private void updateUI(FirebaseUser user) {
-        //hideProgressDialog();
+    private void login(FirebaseUser user) {
         if (user != null) {
-            mStatusTextView.setText("YOU MADE IT!!");
-
+            //mStatusTextView.setText("YOU MADE IT!!");
+            Log.d("Login","User is not null");
             Intent loginIntent = new Intent(this, TeacherInitialScreen.class);
             //package token/uid into intent and send it with setExtra method
             loginIntent.putExtra("UID", user.getUid());
             startActivity(loginIntent);
-        } else {
-            findViewById(R.id.usernamePasswordLogin).setVisibility(View.VISIBLE);
         }
     }
 
@@ -174,17 +172,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //This function's purpose is to call specific functions based on which button is clicked.
     public void onClick(View v) {
         int i = v.getId();
-        /*if (i == R.id.email_create_account_button) {
-        //HERE IS WHERE CREATE ACCOUNT WILL BE CALLED
-            createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString());
-        } else*/ if (i == R.id.login) {
+        if (i == R.id.login) {
             signIn(mUserNameField.getText().toString(), mPasswordField.getText().toString());
-        } /*else if (i == R.id.sign_out_button) {
-        //Potential sign out portion
-            signOut();
-        } else if (i == R.id.verify_email_button) {
-        //Potential email verification portion
-            sendEmailVerification();
-        }*/
+        }
     }
 }
