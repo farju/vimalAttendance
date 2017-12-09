@@ -3,10 +3,13 @@ package com.example.vimal.projectproposal;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -25,29 +28,43 @@ import com.google.firebase.database.ValueEventListener;
  */
 
 //This class is used to render the class creation screen for teachers
-public class TeacherAddClass extends AppCompatActivity {
+public class TeacherAddClass extends AppCompatActivity implements View.OnClickListener {
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
-
+    private EditText Cname;
+    private EditText Croom;
+    private EditText Ccode;
+    private EditText Ctime;
+    private EditText Cdate;
+    private String UID;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.firsttimeteacher);
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        final String UID = (String) getIntent().getSerializableExtra("UID");
+        Cname = (EditText) findViewById(R.id.class_name);
+        Croom = (EditText) findViewById(R.id.room_num);
+        Ccode = (EditText) findViewById(R.id.course_code);
+        Ctime = (EditText) findViewById(R.id.class_time);
+        Cdate = (EditText) findViewById(R.id.day);
+
+        UID = (String) getIntent().getSerializableExtra("UID");
         Log.d("hello", UID);
 
-        Class class_ = new Class(UID);
+        Ctime.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                Ctime.setHint("H:MM");
+            }
+        });
+        Cdate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                Cdate.setHint("Monday, Tuesday, etc...");
+            }
+        });
 
-        try {
-            mDatabase.child("classes").child("10242").setValue(class_); //GENERATE RANDOM STRING ID FOR CLASSES IN CONSTRUCTOR
-            mDatabase.child("classes").child("10241").setValue(class_);
-            updateData(UID, class_.getClass_id());
-            //update teacher to add class ID to classlist
-        } catch (Exception e) {
-            Log.e("bad news", e.toString());
-        }
-
+        findViewById(R.id.addclass).setOnClickListener(this);
     }
 
     @Override
@@ -91,5 +108,73 @@ public class TeacherAddClass extends AppCompatActivity {
                     }
                 });*/
 
+    }
+    @Override
+    public void onClick(View v) {
+        int i = v.getId();
+        if (i == R.id.addclass) {
+            if (validateInput(Cname.getText().toString(), Croom.getText().toString(), Ccode.getText().toString(), Ctime.getText().toString(), Cdate.getText().toString())) {
+                Intent classIntent = new Intent(TeacherAddClass.this, TeacherInitialScreen.class);
+                classIntent.putExtra("UID", UID);
+                startActivity(classIntent);
+            }
+        }
+    }
+
+    public boolean validateInput(String name, String room, String code, String time, String date) {
+        boolean valid = true;
+        Log.d("name", name);
+        Log.d("room", room);
+        Log.d("code", code);
+        Log.d("time", time);
+        Log.d("date", date);
+        //Can always modify the validation checks below but for now its checking empty or not
+        if (TextUtils.isEmpty(name)) {
+            Cname.setError("Required.");
+            valid = false;
+        } else {
+            Cname.setError(null);
+        }
+
+        if (TextUtils.isEmpty(room)) {
+            Croom.setError("Required.");
+            valid = false;
+        } else {
+            Croom.setError(null);
+        }
+
+        if (TextUtils.isEmpty(code)) {
+            Ccode.setError("Required.");
+            valid = false;
+        } else {
+            Ccode.setError(null);
+        }
+
+        if (TextUtils.isEmpty(time)) {
+            Ctime.setError("Required.");
+            valid = false;
+        } else {
+            Ctime.setError(null);
+        }
+
+        if (TextUtils.isEmpty(date)) {
+            Cdate.setError("Required.");
+            valid = false;
+        } else {
+            Cdate.setError(null);
+        }
+
+        if (valid) {
+            Class class_ = new Class(name, code, room, UID, time, date);
+            try {
+                String CID = mDatabase.child("classes").push().getKey(); //GENERATE RANDOM STRING ID FOR CLASSES IN CONSTRUCTOR
+                mDatabase.child("classes").child(CID).setValue(class_);
+                mDatabase.child("users").child(UID).child("classList").push().setValue(CID);
+                Log.d("Pushed Key", CID);
+            } catch (Exception e) {
+                Log.e("bad news", e.toString());
+            }
+        }
+        return valid;
     }
 }

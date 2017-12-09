@@ -86,6 +86,7 @@ public class TeacherInitialScreen extends AppCompatActivity {
                         TextView welcome = (TextView) findViewById(R.id.welcome);
                         welcome.setText("Welcome " + user.getFirst_name() + " " + user.getLast_name() + " to your class list screen!");
 
+                        //TODO: READ DATA FOR EACH CID AND PULL CLASS INFORMATION
                         //This code is to dynamically add the classes if they exist in the classList already
                         if (user.getClassList()!=null) {
                             //Didn't test this code as yet
@@ -102,6 +103,7 @@ public class TeacherInitialScreen extends AppCompatActivity {
                             for(int i = 0; i < user.getClassList().size(); i++) {
                                 TextView text = new TextView(TeacherInitialScreen.this);
                                 Button b = new Button(TeacherInitialScreen.this);
+                                //TODO: Need to read class from the database and render name here
                                 text.setText(user.getClassList().get(i));
                                 //if the user is a student then allow them to view class not create attendance event
                                 if (user.getType().equals("Student")) {

@@ -49,15 +49,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
-    }
-    // [END on_start_check_user]
-
 
     private void signIn(String email, String password) {
         Log.d("signin", "signIn:" + email);
@@ -159,7 +150,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void updateUI(FirebaseUser user) {
         //hideProgressDialog();
         if (user != null) {
-            mStatusTextView.setText("YOU MADE IT!!");
 
             Intent loginIntent = new Intent(this, TeacherInitialScreen.class);
             //package token/uid into intent and send it with setExtra method

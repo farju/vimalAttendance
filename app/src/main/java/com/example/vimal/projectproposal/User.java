@@ -2,6 +2,7 @@ package com.example.vimal.projectproposal;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
@@ -14,7 +15,7 @@ public class User implements Serializable{
     private String first_name;
     private String email;
     private String type;
-    private ArrayList<String> classList;
+    private HashMap<String,String> classList;
 
     private User() {}
 
@@ -23,8 +24,7 @@ public class User implements Serializable{
         first_name = first;
         email = Email;
         type = Type;
-        classList = new ArrayList<String>();
-        classList.add("empty");
+        classList = new HashMap<String, String>();
     }
 
     public String getLast_name() {
@@ -39,7 +39,7 @@ public class User implements Serializable{
     public String getType() {
         return type;
     }
-    public ArrayList<String> getClassList() {
+    public HashMap<String, String> getClassList() {
         return classList;
     }
 }

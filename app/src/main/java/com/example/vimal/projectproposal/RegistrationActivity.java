@@ -68,14 +68,6 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         findViewById(R.id.register).setOnClickListener(this);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
-    }
-
     //CREATION OF ACCOUNT AND HAS TO FIGURE OUT HOW TO CALL THIS IN REGISTRATION ACTIVITY.JAVA
     private void createAccount(String email, String password, String first, String last, String user, String type) {
         Log.d("Create", "createAccount:" + email);

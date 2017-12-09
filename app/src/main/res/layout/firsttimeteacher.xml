@@ -9,7 +9,7 @@
         android:layout_marginTop="16dp"
         android:text="Class Creation"
         android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/button5" />
+        android:layout_alignStart="@+id/addclass" />
 
     <TextView
         android:id="@+id/textView15"
@@ -28,34 +28,34 @@
         android:layout_marginTop="44dp"
         android:text="Room Number"
         android:layout_below="@+id/textView15"
-        android:layout_toStartOf="@+id/editText9" />
+        android:layout_toStartOf="@+id/room_num" />
 
     <EditText
-        android:id="@+id/editText7"
+        android:id="@+id/class_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/textView16"
-        android:layout_marginStart="22dp"
+        android:layout_alignBottom="@+id/textView15"
+        android:layout_marginStart="24dp"
         android:layout_toEndOf="@+id/textView15"
         android:ems="10"
         android:inputType="textPersonName" />
 
     <EditText
-        android:id="@+id/editText9"
+        android:id="@+id/room_num"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/textView16"
-        android:layout_alignEnd="@+id/editText7"
+        android:layout_alignEnd="@+id/class_name"
         android:ems="10"
         android:inputType="textPersonName" />
 
     <EditText
-        android:id="@+id/editText10"
+        android:id="@+id/course_code"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/editText9"
-        android:layout_below="@+id/editText9"
-        android:layout_marginTop="30dp"
+        android:layout_below="@+id/room_num"
+        android:layout_marginTop="31dp"
+        android:layout_toEndOf="@+id/textView16"
         android:ems="10"
         android:inputType="textPersonName" />
 
@@ -64,7 +64,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Course Code"
-        android:layout_alignBottom="@+id/editText10"
+        android:layout_alignBottom="@+id/course_code"
         android:layout_alignEnd="@+id/textView16" />
 
     <TextView
@@ -74,25 +74,42 @@
         android:layout_alignEnd="@+id/textView17"
         android:layout_below="@+id/textView17"
         android:layout_marginTop="46dp"
-        android:text="Schedule" />
-
-    <EditText
-        android:id="@+id/editText11"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="date"
-        android:layout_alignBottom="@+id/textView18"
-        android:layout_alignStart="@+id/editText10" />
+        android:text="Time" />
 
     <Button
-        android:id="@+id/button5"
+        android:id="@+id/addclass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Class"
-        android:layout_below="@+id/editText11"
-        android:layout_alignStart="@+id/editText11"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="57dp" />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="59dp"
+        android:text="Add Class" />
+
+    <EditText
+        android:id="@+id/class_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textView18"
+        android:layout_toEndOf="@+id/textView18"
+        android:ems="10"
+        android:inputType="time" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView16"
+        android:layout_below="@+id/textView18"
+        android:layout_marginTop="51dp"
+        android:text="Day of the Week" />
+
+    <EditText
+        android:id="@+id/day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textView"
+        android:layout_toEndOf="@+id/textView"
+        android:ems="10"
+        android:inputType="textPersonName" />
 
 </RelativeLayout>
