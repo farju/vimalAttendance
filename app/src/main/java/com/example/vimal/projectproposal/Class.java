@@ -15,8 +15,10 @@ public class Class implements Serializable{
     private String teacher_UID;
     //potentially add the attendance set in case I goofed up
 
+    public Class() {}
+
     public Class( String id) {
-        class_id = course_code = classDetails = "abc";
+        class_id = course_code = classDetails = "test class";
         teacher_UID = id;
 
     }
@@ -35,8 +37,5 @@ public class Class implements Serializable{
     public String getTeacher() {
         return teacher_UID;
     }
-/*
-    public List<User> getStudentList() {
-        return studentList;
-    }*/
+
 }

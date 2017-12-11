@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -20,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -29,9 +31,14 @@ import java.util.List;
 
 public class TeacherInitialScreen extends AppCompatActivity {
     private DatabaseReference mDatabase;
+    private User user;
+    private ArrayList<String> class_name;
+    //ArrayAdapter<String> arrayAdapter;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.teacherviewclass);
+        class_name = new ArrayList<>();
         //Receive UID here
         final String UID = (String) getIntent().getSerializableExtra("UID");
 
@@ -40,7 +47,7 @@ public class TeacherInitialScreen extends AppCompatActivity {
 
         //this function is used to read data from the firebase database
         loadData(UID);
-
+        //arrayAdapter = new ArrayAdapter<String>(this, R.layout.simple_list_item_1, user.getClassList());
         //used to add a class and redirects to TeacherAddClass.java
         Button b = (Button) findViewById(R.id.addclass);
         b.setOnClickListener(new View.OnClickListener() {
@@ -77,47 +84,15 @@ public class TeacherInitialScreen extends AppCompatActivity {
         }
     }
     private void loadData(String UID) {
-        FirebaseDatabase.getInstance().getReference().child("users").child(UID)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("users").child(UID).addListenerForSingleValueEvent(new ValueEventListener() {
                     //OnDataChange uses a Datasnapshot object, that represents the user object, and allows us to parse it for the values
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         // Get user information
-                        User user = (User) dataSnapshot.getValue(User.class);
+                        user = (User) dataSnapshot.getValue(User.class);
                         TextView welcome = (TextView) findViewById(R.id.welcome);
                         welcome.setText("Welcome " + user.getFirst_name() + " " + user.getLast_name() + " to your class list screen!");
-
-                        //TODO: READ DATA FOR EACH CID AND PULL CLASS INFORMATION
-
-                        //This code is to dynamically add the classes if they exist in the classList already
-                        if (user.getClassList()!=null) {
-                            //Didn't test this code as yet
-                            RelativeLayout rl=(RelativeLayout)findViewById(R.id.teacherWelcome);
-
-                            ScrollView sv = new ScrollView(TeacherInitialScreen.this);
-                            sv.setLayoutParams(new ScrollView.LayoutParams(ScrollView.LayoutParams.MATCH_PARENT, ScrollView.LayoutParams.MATCH_PARENT));
-                            LinearLayout ll = new LinearLayout(TeacherInitialScreen.this);
-                            ll.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT));
-                            ll.setOrientation(LinearLayout.VERTICAL);
-                            sv.addView(ll);
-
-                            //for loop to create the textview with the course code and the button along with it
-                            for(int i = 0; i < user.getClassList().size(); i++) {
-                                TextView text = new TextView(TeacherInitialScreen.this);
-                                Button b = new Button(TeacherInitialScreen.this);
-                                text.setText(user.getClassList().get(i));
-                                //if the user is a student then allow them to view class not create attendance event
-                                if (user.getType().equals("Student")) {
-                                    b.setText("View Class");
-                                } else {
-                                    b.setText("Attendance");
-                                }
-                                ll.addView(text);
-                                ll.addView(b);
-                            }
-                            rl.addView(sv);
-                        }
-
+                        getClassName(user.getClassListString());
                     }
 
                     //if the database retrieval fails then program code in here
@@ -127,4 +102,52 @@ public class TeacherInitialScreen extends AppCompatActivity {
                     }
                 });
     }
+
+    public void getClassName(ArrayList <String> CID){
+
+        for(int i = 0; i < user.getClassList().size(); i++) {
+            FirebaseDatabase.getInstance().getReference().child("classes").child(CID.get(i)).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Class class_ = (Class) dataSnapshot.getValue(Class.class);
+                    Log.d("Classa got: ", class_.getCourse_code());
+                    class_name.add(class_.getCourse_code());
+                    updateUI();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.d("loadClass:onCancelled", databaseError.toException().toString());
+                }
+            });
+        }
+
+    }
+
+    private void updateUI() {
+        //This code is to dynamically add the classes if they exist in the classList already
+        if (user.getClassList()!=null) {
+            LinearLayout ll = (LinearLayout) findViewById(R.id.linl);
+
+            TextView text = new TextView(TeacherInitialScreen.this);
+
+            //for each class ID get the class name
+            int index = class_name.size() - 1;
+
+            Log.d("Classa Key: ", user.getClassListString().get(index));
+            text.setText(class_name.get(index));
+            Log.d("Classa code: ", class_name.get(index));
+            //if the user is a student then allow them to view class not create attendance event
+
+            Button b = new Button(TeacherInitialScreen.this);
+            if (user.getType().equals("Student")) {
+                b.setText("View Class");
+            } else {
+                b.setText("Attendance");
+            }
+            ll.addView(text);
+            ll.addView(b);
+        }
+    }
+
 }

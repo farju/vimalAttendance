@@ -26,8 +26,10 @@ public class User implements Serializable{
         email = Email;
         type = Type;
         classList = new HashMap<String, String>();
-        //classList.add("first");
-        //classList.add("last");
+    }
+
+    public ArrayList<String> getClassListString() {
+        return new ArrayList<String>(classList.values());
     }
 
     public String getLast_name() {
