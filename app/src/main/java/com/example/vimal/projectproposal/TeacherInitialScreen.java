@@ -114,6 +114,7 @@ public class TeacherInitialScreen extends AppCompatActivity {
 
         RelativeLayout rl=(RelativeLayout)findViewById(R.id.teacherWelcome);
 
+        //TODO Make scrollview and linearlayout inside the xml file and get reference to it for appending
         ScrollView sv = new ScrollView(TeacherInitialScreen.this);
         sv.setLayoutParams(new ScrollView.LayoutParams(ScrollView.LayoutParams.WRAP_CONTENT, ScrollView.LayoutParams.WRAP_CONTENT));
         sv.getPaddingTop();
@@ -142,28 +143,18 @@ public class TeacherInitialScreen extends AppCompatActivity {
                                 if (user.getType().equals("Student")) {
 
                                     b.setText("View Class");
-                                    b.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            Intent registerIntent = new Intent(TeacherInitialScreen.this, TeacherClassViewActivity.class);
-                                            registerIntent.putExtra("class", classes);
-                                            registerIntent.putExtra("UserType", user.getType());
-                                            startActivity(registerIntent);
-                                        }
-                                    });
                                 } else {
                                     b.setText("Attendance");
-                                    b.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            Intent registerIntent = new Intent(TeacherInitialScreen.this, TeacherClassViewActivity.class);
-                                            registerIntent.putExtra("class", classes);
-                                            registerIntent.putExtra("UserType", user.getType());
-                                            startActivity(registerIntent);
-                                        }
-                                    });
-
                                 }
+                                b.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent registerIntent = new Intent(TeacherInitialScreen.this, TeacherClassViewActivity.class);
+                                        registerIntent.putExtra("class", classes);
+                                        registerIntent.putExtra("UserType", user.getType());
+                                        startActivity(registerIntent);
+                                    }
+                                });
                             }
 
                             //if the database retrieval fails then program code in here

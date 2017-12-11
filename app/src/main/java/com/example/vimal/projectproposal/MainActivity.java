@@ -1,6 +1,7 @@
 package com.example.vimal.projectproposal;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,12 +18,17 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private FirebaseAuth mAuth;
     private EditText mUserNameField;
     private TextView mStatusTextView;
     private EditText mPasswordField;
+    private DatabaseReference mDatabase;
+    Uri data;
+    String[] tokens;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +36,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         mAuth = FirebaseAuth.getInstance();
 
+
         mStatusTextView = (TextView) findViewById(R.id.status);
         mUserNameField = (EditText) findViewById(R.id.usernameinput);
         mPasswordField = (EditText) findViewById(R.id.passwordinput);
+
+        Intent intent = getIntent();
+        data = intent.getData();
+        if (data!= null) {
+            tokens = data.toString().split("/");
+        }
+
 
         findViewById(R.id.login).setOnClickListener(this);
         //This has to be placed in either RegistrationActivity or figure out how to add register on this page
@@ -43,6 +57,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(View v) {
                 Intent registerIntent = new Intent(MainActivity.this, RegistrationActivity.class);
+                if (data!=null) {
+                    Log.d("data", tokens[3]);
+                    registerIntent.putExtra("data_", tokens[3]);
+                }
                 startActivity(registerIntent);
             }
         });
@@ -92,39 +110,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mAuth.signOut();
         updateUI(null);
     }
-//EMAIL VERIFICATION PORTION
-    /*
-    private void sendEmailVerification() {
-        // Disable button
-        findViewById(R.id.verify_email_button).setEnabled(false);
 
-        // Send verification email
-        // [START send_email_verification]
-        final FirebaseUser user = mAuth.getCurrentUser();
-        user.sendEmailVerification()
-                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        // [START_EXCLUDE]
-                        // Re-enable button
-                        findViewById(R.id.verify_email_button).setEnabled(true);
-
-                        if (task.isSuccessful()) {
-                            Toast.makeText(EmailPasswordActivity.this,
-                                    "Verification email sent to " + user.getEmail(),
-                                    Toast.LENGTH_SHORT).show();
-                        } else {
-                            Log.e(TAG, "sendEmailVerification", task.getException());
-                            Toast.makeText(EmailPasswordActivity.this,
-                                    "Failed to send verification email.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                        // [END_EXCLUDE]
-                    }
-                });
-        // [END send_email_verification]
-    }
-*/
     private boolean validateForm() {
         boolean valid = true;
 
@@ -137,8 +123,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         String password = mPasswordField.getText().toString();
-        if (TextUtils.isEmpty(password)) {
-            mPasswordField.setError("Required.");
+        if (TextUtils.isEmpty(password) || password.length() < 6) {
+            mPasswordField.setError("Required and must be 6 or more characters.");
             valid = false;
         } else {
             mPasswordField.setError(null);
@@ -150,10 +136,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void updateUI(FirebaseUser user) {
         //hideProgressDialog();
         if (user != null) {
+            mDatabase = FirebaseDatabase.getInstance().getReference();
 
             Intent loginIntent = new Intent(this, TeacherInitialScreen.class);
             //package token/uid into intent and send it with setExtra method
             loginIntent.putExtra("UID", user.getUid());
+
+            if (data!=null) {
+                mDatabase.child("users").child(user.getUid()).child("classList").push().setValue("1234");
+            }
             startActivity(loginIntent);
         } else {
             findViewById(R.id.usernamePasswordLogin).setVisibility(View.VISIBLE);
@@ -164,17 +155,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //This function's purpose is to call specific functions based on which button is clicked.
     public void onClick(View v) {
         int i = v.getId();
-        /*if (i == R.id.email_create_account_button) {
-        //HERE IS WHERE CREATE ACCOUNT WILL BE CALLED
-            createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString());
-        } else*/ if (i == R.id.login) {
+
+        if (i == R.id.login) {
             signIn(mUserNameField.getText().toString(), mPasswordField.getText().toString());
-        } /*else if (i == R.id.sign_out_button) {
-        //Potential sign out portion
-            signOut();
-        } else if (i == R.id.verify_email_button) {
-        //Potential email verification portion
-            sendEmailVerification();
-        }*/
+        }
     }
 }

@@ -17,12 +17,11 @@ public class Class implements Serializable{
     private String class_name;
     private String course_code;
     private String room_num;
-    //private List<User> studentList;
     private String teacher_UID;
     private String class_time;
     private String class_date;
-    //potentially add the attendance set in case I goofed up
 
+    //TODO Need to add class ID
     public Class( String id) {
         class_name = "";
         course_code = "";

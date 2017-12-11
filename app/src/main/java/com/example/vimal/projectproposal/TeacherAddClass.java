@@ -156,6 +156,7 @@ public class TeacherAddClass extends AppCompatActivity implements View.OnClickLi
         }
 
         if (valid) {
+            //TODO pass in class ID into this constructor
             Class class_ = new Class(name, code, room, UID, time, date);
             try {
                 String CID = mDatabase.child("classes").push().getKey(); //GENERATE RANDOM STRING ID FOR CLASSES IN CONSTRUCTOR

@@ -1,6 +1,7 @@
 package com.example.vimal.projectproposal;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -85,16 +86,22 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("createuserSuccess", "createUserWithUsername:success");
+                            String data = (String) getIntent().getSerializableExtra("data_");
                             FirebaseUser user = mAuth.getCurrentUser();
                             User userObject = new User(mEmailField.getText().toString(), mFirstNameField.getText().toString(), mLastNameField.getText().toString(), AccountType);
                             String userId = user.getUid();
                             try {
                                 mDatabase.child("users").child(userId).setValue(userObject);
+                                if (data != null) {
+                                    Log.d("hello", data);
+                                    mDatabase.child("users").child(userId).child("classList").push().setValue("1234");
+                                }
                             } catch (Exception e) {
                                 Log.e("bad news", e.toString());
                             }
                             Intent registationIntent = new Intent(RegistrationActivity.this, TeacherInitialScreen.class);
                             registationIntent.putExtra("UID", userId);
+
                             startActivity(registationIntent);
                             updateUI(user);
 
@@ -127,8 +134,8 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         }
 
         String password = mPasswordField.getText().toString();
-        if (TextUtils.isEmpty(password)) {
-            mPasswordField.setError("Required.");
+        if (TextUtils.isEmpty(password) || password.length() < 6) {
+            mPasswordField.setError("Required and must be 6 or more characters.");
             valid = false;
         } else {
             mPasswordField.setError(null);

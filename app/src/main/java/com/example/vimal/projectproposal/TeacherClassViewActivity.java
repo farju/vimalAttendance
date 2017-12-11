@@ -47,6 +47,7 @@ public class TeacherClassViewActivity extends AppCompatActivity {
                 }
             });
             b2.setVisibility(View.VISIBLE);
+            //TODO Starts attendance event
         }
 
     }
