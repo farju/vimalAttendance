@@ -15,7 +15,6 @@
         android:id="@+id/textView15"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/textView13"
         android:layout_below="@+id/textView14"
         android:layout_marginStart="12dp"
         android:layout_marginTop="58dp"
@@ -31,7 +30,7 @@
         android:layout_toStartOf="@+id/room_num" />
 
     <EditText
-        android:id="@+id/class_name"
+        android:id="@+id/studentClassName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/textView15"
@@ -45,7 +44,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/textView16"
-        android:layout_alignEnd="@+id/class_name"
+        android:layout_alignEnd="@+id/studentClassName"
         android:ems="10"
         android:inputType="textPersonName" />
 

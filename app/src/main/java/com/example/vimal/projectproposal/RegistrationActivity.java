@@ -93,14 +93,9 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                             } catch (Exception e) {
                                 Log.e("bad news", e.toString());
                             }
-                            if (AccountType.equals("Student")) {
-                                //Have to add this intent and havent set up student activity
-                                //Intent registrationIntent (this, )
-                            } else {
-                                Intent registationIntent = new Intent(RegistrationActivity.this, TeacherInitialScreen.class);
-                                registationIntent.putExtra("UID", userId);
-                                startActivity(registationIntent);
-                            }
+                            Intent registationIntent = new Intent(RegistrationActivity.this, TeacherInitialScreen.class);
+                            registationIntent.putExtra("UID", userId);
+                            startActivity(registationIntent);
                             updateUI(user);
 
 

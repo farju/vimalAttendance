@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -21,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -51,15 +53,14 @@ public class TeacherInitialScreen extends AppCompatActivity {
                 startActivity(userIntent);
             }
         });
-        //Create the Array to receive all class names and when adding to listview we hardcode the creation of a new button
-        //store teacher UID in the database when storing class objects (foreign key)
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
-    //https://developer.android.com/training/appbar/actions.html was used for this method
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -86,35 +87,16 @@ public class TeacherInitialScreen extends AppCompatActivity {
                         TextView welcome = (TextView) findViewById(R.id.welcome);
                         welcome.setText("Welcome " + user.getFirst_name() + " " + user.getLast_name() + " to your class list screen!");
 
-                        //TODO: READ DATA FOR EACH CID AND PULL CLASS INFORMATION
-                        //This code is to dynamically add the classes if they exist in the classList already
+                        if (user.getType().equals("Teacher")) {
+                            Button button = (Button) findViewById(R.id.addclass);
+                            button.setVisibility(View.VISIBLE);
+                            TextView addClass = (TextView) findViewById(R.id.addclassText);
+                            addClass.setVisibility(View.VISIBLE);
+                        }
+
                         if (user.getClassList()!=null) {
-                            //Didn't test this code as yet
-                            RelativeLayout rl=(RelativeLayout)findViewById(R.id.teacherWelcome);
-
-                            ScrollView sv = new ScrollView(TeacherInitialScreen.this);
-                            sv.setLayoutParams(new ScrollView.LayoutParams(ScrollView.LayoutParams.MATCH_PARENT, ScrollView.LayoutParams.MATCH_PARENT));
-                            LinearLayout ll = new LinearLayout(TeacherInitialScreen.this);
-                            ll.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT));
-                            ll.setOrientation(LinearLayout.VERTICAL);
-                            sv.addView(ll);
-
-                            //for loop to create the textview with the course code and the button along with it
-                            for(int i = 0; i < user.getClassList().size(); i++) {
-                                TextView text = new TextView(TeacherInitialScreen.this);
-                                Button b = new Button(TeacherInitialScreen.this);
-                                //TODO: Need to read class from the database and render name here
-                                text.setText(user.getClassList().get(i));
-                                //if the user is a student then allow them to view class not create attendance event
-                                if (user.getType().equals("Student")) {
-                                    b.setText("View Class");
-                                } else {
-                                    b.setText("Attendance");
-                                }
-                                ll.addView(text);
-                                ll.addView(b);
-                            }
-                            rl.addView(sv);
+                            //packaged the layout updating class code into this function
+                            renderClasses(user);
                         }
 
                     }
@@ -122,8 +104,78 @@ public class TeacherInitialScreen extends AppCompatActivity {
                     //if the database retrieval fails then program code in here
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-
+                        Log.e("Error", "User Database Retrieval Failed!");
                     }
                 });
+    }
+//This function is used to dynamically add the classes for each user to the layout with a button
+    private void renderClasses(final User user) {
+
+
+        RelativeLayout rl=(RelativeLayout)findViewById(R.id.teacherWelcome);
+
+        ScrollView sv = new ScrollView(TeacherInitialScreen.this);
+        sv.setLayoutParams(new ScrollView.LayoutParams(ScrollView.LayoutParams.WRAP_CONTENT, ScrollView.LayoutParams.WRAP_CONTENT));
+        sv.getPaddingTop();
+        LinearLayout ll = new LinearLayout(TeacherInitialScreen.this);
+        ll.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT));
+        ll.setOrientation(LinearLayout.VERTICAL);
+        sv.addView(ll);
+
+        //Iterator used to loop through each element of the hash map and collect the key and for each key get the value
+            Iterator myVeryOwnIterator = user.getClassList().keySet().iterator();
+            while (myVeryOwnIterator.hasNext()) {
+                final TextView text = new TextView(TeacherInitialScreen.this);
+                final Button b = new Button(TeacherInitialScreen.this);
+                String key = (String) myVeryOwnIterator.next();
+                String value = (String) user.getClassList().get(key);
+
+
+                //Query database for information for each class object and dynamically add it to the layout
+                FirebaseDatabase.getInstance().getReference().child("classes").child(value)
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                // Get class information
+                                final Class classes = dataSnapshot.getValue(Class.class);
+                                text.setText(classes.getClass_name());
+                                if (user.getType().equals("Student")) {
+
+                                    b.setText("View Class");
+                                    b.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent registerIntent = new Intent(TeacherInitialScreen.this, TeacherClassViewActivity.class);
+                                            registerIntent.putExtra("class", classes);
+                                            registerIntent.putExtra("UserType", user.getType());
+                                            startActivity(registerIntent);
+                                        }
+                                    });
+                                } else {
+                                    b.setText("Attendance");
+                                    b.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent registerIntent = new Intent(TeacherInitialScreen.this, TeacherClassViewActivity.class);
+                                            registerIntent.putExtra("class", classes);
+                                            registerIntent.putExtra("UserType", user.getType());
+                                            startActivity(registerIntent);
+                                        }
+                                    });
+
+                                }
+                            }
+
+                            //if the database retrieval fails then program code in here
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                Log.e("Error", "Class Database Retrieval Failed!");
+                            }
+                        });
+
+                ll.addView(text);
+                ll.addView(b);
+            }
+        rl.addView(sv);
     }
 }

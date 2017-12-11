@@ -8,20 +8,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 /**
  * Created by Vimal on 12/6/2017.
@@ -42,7 +33,7 @@ public class TeacherAddClass extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.firsttimeteacher);
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        Cname = (EditText) findViewById(R.id.class_name);
+        Cname = (EditText) findViewById(R.id.studentClassName);
         Croom = (EditText) findViewById(R.id.room_num);
         Ccode = (EditText) findViewById(R.id.course_code);
         Ctime = (EditText) findViewById(R.id.class_time);
@@ -54,7 +45,7 @@ public class TeacherAddClass extends AppCompatActivity implements View.OnClickLi
         Ctime.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                Ctime.setHint("H:MM");
+                Ctime.setHint("HH:MM");
             }
         });
         Cdate.setOnFocusChangeListener(new View.OnFocusChangeListener() {

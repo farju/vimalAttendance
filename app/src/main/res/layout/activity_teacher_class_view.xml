@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.vimal.projectproposal.TeacherClassViewActivity">
+
+    <TextView
+        android:id="@+id/class_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/classDetails"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="18dp"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/class_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/class_name"
+        android:layout_below="@+id/class_name"
+        android:layout_marginTop="40dp"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/class_room"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/class_code"
+        android:layout_below="@+id/class_code"
+        android:layout_marginTop="47dp"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/class_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/class_room"
+        android:layout_below="@+id/class_room"
+        android:layout_marginTop="48dp"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/class_day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/class_time"
+        android:layout_below="@+id/class_time"
+        android:layout_marginTop="36dp"
+        android:text="TextView" />
+
+    <Button
+        android:id="@+id/addStudents"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/class_day"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="37dp"
+        android:visibility="gone"
+        android:text="Add Students" />
+
+    <TextView
+        android:id="@+id/classDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="14dp"
+        android:text="Class Details"
+        android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/attendance_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/addStudents"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:visibility="gone"
+        android:text="Start Attendance" />
+</RelativeLayout>

@@ -33,6 +33,8 @@ public class Class implements Serializable{
 
     }
 
+    public Class() {}
+
     public Class(String name, String code, String room, String id, String time, String date) {
         class_name = name;
         course_code = code;
