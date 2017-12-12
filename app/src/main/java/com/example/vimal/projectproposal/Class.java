@@ -15,30 +15,23 @@ import java.util.List;
 public class Class implements Serializable{
     private String[] days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
     private String class_name;
+    private String class_ID;
     private String course_code;
     private String room_num;
     private String teacher_UID;
     private String class_time;
     private String class_date;
 
-    //TODO Need to add class ID
-    public Class( String id) {
-        class_name = "";
-        course_code = "";
-        room_num = "";
-        teacher_UID = id;
-        class_time = "";
-        class_date = "";
-
+    public Class() {
+        class_name = class_ID = course_code = room_num = teacher_UID = class_time = class_date = "";
     }
 
-    public Class() {}
-
-    public Class(String name, String code, String room, String id, String time, String date) {
+    public Class(String id, String name, String code, String room, String teacher_id, String time, String date) {
+        class_ID = id;
         class_name = name;
         course_code = code;
         room_num = room;
-        teacher_UID = id;
+        teacher_UID = teacher_id;
         class_time = time;
         boolean flag = false;
         for (int i = 0; i < days.length; i++) {
@@ -77,6 +70,8 @@ public class Class implements Serializable{
     public String getClass_date() {
         return class_date;
     }
+
+    public String getClass_ID() {return class_ID;}
 
     /*
 

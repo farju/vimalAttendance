@@ -17,26 +17,26 @@ public class AddStudentActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         Class classes = (Class) intent.getSerializableExtra("class");
+        String classID = (String) classes.getClass_ID();
         String className = (String) classes.getClass_name();
-        sendEmail(className);
+        sendEmail(classID, className);
 
 
     }
 
-    private void sendEmail(String className) {
+    private void sendEmail(String classID, String className) {
         Log.i("Send email", "");
         String[] TO = {""};
         String[] CC = {""};
-        //TODO instead of test we have to pass in the class id
-        String link_val = "https://class/test";
+        String link_val = "https://class/" + classID;
         Intent emailIntent = new Intent(Intent.ACTION_SEND);
 
         emailIntent.setData(Uri.parse("mailto:"));
         emailIntent.setType("text/html");
         emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
         emailIntent.putExtra(Intent.EXTRA_CC, CC);
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Adding you to the Class");
-        emailIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml("<a href=\"" + link_val + "\">Join class</a>") );
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Adding you to the " + className + " class");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml("Welcome to " + className + ".To join this class please click the link below.<br><a href=\"" + link_val + "\">Join class</a>") );
 
         try {
             startActivity(Intent.createChooser(emailIntent, "Send mail..."));

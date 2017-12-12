@@ -20,17 +20,9 @@ public class TeacherClassViewActivity extends AppCompatActivity {
         Intent classIntent = getIntent();
         final Class classes = (Class) classIntent.getSerializableExtra("class");
 
-        TextView name = (TextView) findViewById(R.id.class_name);
-        TextView code = (TextView) findViewById(R.id.class_code);
-        TextView room = (TextView) findViewById(R.id.class_room);
-        TextView time = (TextView) findViewById(R.id.class_time);
-        TextView day = (TextView) findViewById(R.id.class_day);
+        TextView name = (TextView) findViewById(R.id.classDetailstext);
 
-        name.setText(classes.getClass_name());
-        code.setText(classes.getCourse_code());
-        room.setText(classes.getRoom_num());
-        time.setText(classes.getClass_time());
-        day.setText(classes.getClass_date());
+        name.setText("Class Name: " + classes.getClass_name() + "\nCourse Code: " + classes.getCourse_code() + "\nRoom Number: " + classes.getRoom_num() + "\nClass Time: " + classes.getClass_time() + "\nDay of the Week: " + classes.getClass_date());
 
         String type = (String) classIntent.getSerializableExtra("UserType");
         if (type.equals("Teacher")) {

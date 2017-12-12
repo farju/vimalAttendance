@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         data = intent.getData();
         if (data!= null) {
             tokens = data.toString().split("/");
+            Log.d("token", tokens[3]);
         }
 
 
@@ -143,7 +144,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             loginIntent.putExtra("UID", user.getUid());
 
             if (data!=null) {
-                mDatabase.child("users").child(user.getUid()).child("classList").push().setValue("1234");
+                Log.d("login", tokens[3]);
+                mDatabase.child("users").child(user.getUid()).child("classList").push().setValue(tokens[3]);
             }
             startActivity(loginIntent);
         } else {

@@ -86,6 +86,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("createuserSuccess", "createUserWithUsername:success");
+                            //This is where we send the class id from login to registration
                             String data = (String) getIntent().getSerializableExtra("data_");
                             FirebaseUser user = mAuth.getCurrentUser();
                             User userObject = new User(mEmailField.getText().toString(), mFirstNameField.getText().toString(), mLastNameField.getText().toString(), AccountType);
@@ -94,7 +95,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                                 mDatabase.child("users").child(userId).setValue(userObject);
                                 if (data != null) {
                                     Log.d("hello", data);
-                                    mDatabase.child("users").child(userId).child("classList").push().setValue("1234");
+                                    mDatabase.child("users").child(userId).child("classList").push().setValue(data);
                                 }
                             } catch (Exception e) {
                                 Log.e("bad news", e.toString());
