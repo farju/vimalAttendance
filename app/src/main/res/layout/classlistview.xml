@@ -13,29 +13,31 @@
         android:layout_marginTop="17dp"
         android:text="Class Display" />
 
+    <Button
+        android:id="@+id/addclass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="12dp"
+        android:visibility="gone"
+        android:text="Add New Class" />
+
     <ScrollView
-        android:id="@+id/scroll"
-        android:layout_marginTop="14dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/welcome">
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_below="@+id/welcome"
+        android:layout_marginTop="21dp"
+        android:id="@+id/sv" >
 
-    </ScrollView>
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/scroll">
-
-        <Button
-            android:id="@+id/addclass"
+        <LinearLayout
+            android:id="@+id/linl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="89dp"
-            android:text="Add Class"
-            android:visibility="gone" />
+            android:orientation="vertical">
+
+        </LinearLayout>
+    </ScrollView>
 
         <TextView
             android:id="@+id/addclassText"
@@ -47,5 +49,5 @@
             android:layout_toStartOf="@+id/addclass"
             android:text="New Class?"
             android:visibility="gone" />
-    </RelativeLayout>
+    <!--/RelativeLayout-->
 </RelativeLayout>

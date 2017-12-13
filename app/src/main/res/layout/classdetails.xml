@@ -21,9 +21,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/classDetailstext"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="37dp"
-        android:visibility="gone"
-        android:text="Add Students" />
+        android:layout_marginTop="35dp"
+        android:text="Add Students"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/classDetails"
@@ -42,6 +42,25 @@
         android:layout_below="@+id/addStudents"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:visibility="gone"
-        android:text="Start Attendance" />
+        android:text="Start Attendance"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/attendance_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/attendance_start"
+        android:layout_marginTop="14dp"
+        android:layout_centerHorizontal="true"
+        android:text="Enrolled Students"
+        android:visibility="gone"        />
+    <ListView
+        android:id="@+id/student_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/attendance_title"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"/>
+
 </RelativeLayout>

@@ -111,11 +111,12 @@ public class TeacherInitialScreen extends AppCompatActivity {
 
 
         //TODO Still need to make the button next to the textview so might have to use arrayadapter and so on :'(
-        ScrollView sv = (ScrollView) findViewById(R.id.scroll);
-        LinearLayout ll = new LinearLayout(TeacherInitialScreen.this);
-        ll.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT));
-        ll.setOrientation(LinearLayout.VERTICAL);
-        sv.addView(ll);
+        //ScrollView sv = (ScrollView) findViewById(R.id.scroll);
+        //LinearLayout ll = new LinearLayout(TeacherInitialScreen.this);
+        //ll.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT));
+        //ll.setOrientation(LinearLayout.VERTICAL);
+        //sv.addView(ll);
+        LinearLayout ll = (LinearLayout) findViewById(R.id.linl);
 
         //Iterator used to loop through each element of the hash map and collect the key and for each key get the value
             Iterator myVeryOwnIterator = user.getClassList().keySet().iterator();

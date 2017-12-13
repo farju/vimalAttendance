@@ -31,7 +31,6 @@
         <activity android:name=".TeacherAddClass" />
         <activity android:name=".TeacherClassViewActivity" />
         <activity android:name=".AddStudentActivity"/>
-        <activity android:name=".AttendanceCreation"/>
     </application>
 
 </manifest>

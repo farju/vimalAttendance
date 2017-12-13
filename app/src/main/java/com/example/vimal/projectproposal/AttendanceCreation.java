@@ -1,13 +1,16 @@
 package com.example.vimal.projectproposal;
 
-import android.content.Intent;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
-
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -16,31 +19,61 @@ import java.util.Date;
 import java.util.Random;
 
 /**
- * Created by Vimal on 12/12/2017.
+ * Created by Mera on 2017-12-12.
  */
 
-public class AttendanceCreation extends AppCompatActivity {
+public class AttendanceCreation extends DialogFragment {
+
+    public interface SetLimitDialogListener {
+        public void onDialogPositiveClick(DialogFragment dialog);
+    }
+
+    SetLimitDialogListener mListener;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.attendancescreen);
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        // Verify that the host activity implements the callback interface
+        try {
+            // Instantiate the NoticeDialogListener so we can send events to the host
+            mListener = (SetLimitDialogListener) activity;
+        } catch (ClassCastException e) {
+            // The activity doesn't implement the interface, throw exception
+            throw new ClassCastException(activity.toString()
+                    + " must implement NoticeDialogListener");
+        }
+    }
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        // Use the Builder class for convenient dialog construction
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        final View view = inflater.inflate(R.layout.attendancescreen, null);
+        Bundle b = this.getArguments();
+        Class c = (Class) b.getSerializable("class");
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        Intent intent = getIntent();
-        Class classes = (Class) intent.getSerializableExtra("class");
 
-        TextView text = (TextView) findViewById(R.id.startTime);
-        TextView text2 = (TextView) findViewById(R.id.uniqueCode);
-        //Started at 8:55 A.M. For DPS 924 Android.
+        TextView text = (TextView) view.findViewById(R.id.startTime);
+        TextView text2 = (TextView) view.findViewById(R.id.uniqueCode);
         Date currentTime = Calendar.getInstance().getTime();
         DateFormat df = new SimpleDateFormat("hh:mm a");
         String time = df.format(currentTime);
 
-        text.setText("Started at " + time + " For " + classes.getClass_name());
+        text.setText("Started at " + time + " For " + c.getClass_name());
 
         String value = generateCode();
         text2.setText(value);
+        builder.setView(view);
 
+        builder.setPositiveButton("Take Attendance", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Log.d("Dialog", "Button clicked");
+                mListener.onDialogPositiveClick(AttendanceCreation.this);
+            }
+        });
+        // Create the AlertDialog object and return it
+        return builder.create();
     }
+
     private String generateCode() {
         char[] chars = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
         StringBuilder sb = new StringBuilder();
@@ -51,27 +84,5 @@ public class AttendanceCreation extends AppCompatActivity {
         }
         String output = sb.toString();
         return output;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }
-    //https://developer.android.com/training/appbar/actions.html was used for this method
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.signout:
-                FirebaseAuth.getInstance().signOut();
-                Intent login = new Intent(this, MainActivity.class);
-                startActivity(login);
-
-            default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
-
-        }
     }
 }

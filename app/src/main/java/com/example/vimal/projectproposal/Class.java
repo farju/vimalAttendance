@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -78,6 +79,17 @@ public class Class implements Serializable{
 
     public HashMap<String, String> getStudentList() {
         return studentList;
+    }
+
+    public ArrayList<String> getStudentIDs() {
+        ArrayList<String> s = new ArrayList<>();
+        Iterator myVeryOwnIterator = studentList.keySet().iterator();
+        while (myVeryOwnIterator.hasNext()) {
+            String key = (String) myVeryOwnIterator.next();
+            s.add(studentList.get(key));
+            }
+
+        return s;
     }
 
     /*

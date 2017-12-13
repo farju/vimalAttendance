@@ -42,4 +42,13 @@ public class User implements Serializable{
     public HashMap<String, String> getClassList() {
         return classList;
     }
+    public ArrayList<String> getClassListString() {
+        return new ArrayList<String>(classList.values());
+    }
+
+    @Override
+    public String toString() {
+        return first_name + " " + last_name;
+    }
 }
+
