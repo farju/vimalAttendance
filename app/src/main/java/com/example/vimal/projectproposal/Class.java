@@ -1,5 +1,8 @@
 package com.example.vimal.projectproposal;
 
+import android.os.CountDownTimer;
+import android.util.Log;
+
 import java.io.Serializable;
 import java.sql.Time;
 import java.text.ParseException;
@@ -24,19 +27,26 @@ public class Class implements Serializable{
     private String class_time;
     private String class_date;
     private HashMap<String, String> studentList;
+    private boolean attendance_open;
+    private String code;
+    //private ArrayList<Attendance> attendance;
 
     public Class() {
         class_name = class_ID = course_code = room_num = teacher_UID = class_time = class_date = "";
         studentList = new HashMap<String, String>();
+        attendance_open = false;
+        code = null;
     }
 
     public Class(String id, String name, String code, String room, String teacher_id, String time, String date) {
+        attendance_open = false;
         class_ID = id;
         class_name = name;
         course_code = code;
         room_num = room;
         teacher_UID = teacher_id;
         class_time = time;
+        code = null;
         boolean flag = false;
         for (int i = 0; i < days.length; i++) {
             if (date.equals(days[i])) {
@@ -90,6 +100,29 @@ public class Class implements Serializable{
             }
 
         return s;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public void start_attendance(){
+        attendance_open = true;
+        //TODO:code logic to record student attendance
+        new CountDownTimer(30000, 1000) { //30 secs  -> 900000 is 15 mins (so vimal says)
+            public void onTick(long millisUntilFinished) {
+            }
+            public void onFinish() {
+                attendance_open = false;
+                Log.d("end", "timer finished " + attendance_open + " " + code);
+                code = null;
+            }
+        }.start();
+
     }
 
     /*

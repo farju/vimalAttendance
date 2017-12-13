@@ -63,7 +63,7 @@ public class AttendanceCreation extends DialogFragment {
         String value = generateCode();
         text2.setText(value);
         builder.setView(view);
-
+        c.setCode(value);
         builder.setPositiveButton("Take Attendance", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 Log.d("Dialog", "Button clicked");

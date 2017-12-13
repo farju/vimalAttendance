@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -25,13 +26,15 @@ import java.util.ArrayList;
 public class TeacherClassViewActivity extends AppCompatActivity implements AttendanceCreation.SetLimitDialogListener {
 
     ArrayAdapter<String> adapter;
+    Class classes;
+    Attendance attendance;
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.classdetails);
         Intent classIntent = getIntent();
-        final Class classes = (Class) classIntent.getSerializableExtra("class");
+        classes = (Class) classIntent.getSerializableExtra("class");
         final ArrayList<String> student_names = new ArrayList<String>();
         DatabaseReference mDatabase;
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -40,6 +43,7 @@ public class TeacherClassViewActivity extends AppCompatActivity implements Atten
         name.setText("Class Name: " + classes.getClass_name() + "\nCourse Code: " + classes.getCourse_code() + "\nRoom Number: " + classes.getRoom_num() + "\nClass Time: " + classes.getClass_time() + "\nDay of the Week: " + classes.getClass_date());
 
         String type = (String) classIntent.getSerializableExtra("UserType");
+
         if (type.equals("Teacher")) {
             Button b1 = (Button) findViewById(R.id.addStudents);
             Button b2 = (Button) findViewById(R.id.attendance_start);
@@ -94,6 +98,24 @@ public class TeacherClassViewActivity extends AppCompatActivity implements Atten
             adapter = new ArrayAdapter<String>(TeacherClassViewActivity.this, android.R.layout.simple_list_item_1, student_names);
             students.setAdapter(adapter);
 
+        }else{
+            //TODO: set input text for student to confirm attendance
+            final EditText code_ = (EditText) findViewById(R.id.confirm_code);
+            Button student_b = (Button) findViewById(R.id.confirm_button);
+            TextView txt = (TextView) findViewById(R.id.student_code_title);
+
+            code_.setVisibility(View.VISIBLE);
+            student_b.setVisibility(View.VISIBLE);
+            txt.setVisibility(View.VISIBLE);
+
+            student_b.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(classes.getCode()!= null && code_.getText().toString().equals(classes.getCode())){
+                        //TODO: add student to existing attendance obj
+                    }
+                }
+            });
         }
 
 
@@ -123,8 +145,10 @@ public class TeacherClassViewActivity extends AppCompatActivity implements Atten
 
     public void onDialogPositiveClick(DialogFragment dialog){
 
-        //TODO: send notifications to all students in the class list
-
+        //TODO: send notifications to all students in the class list and create attendance object with empty attendance list
+        // push attendance obj to firebase
+        attendance = new Attendance("", "");
+        classes.start_attendance();
     }
 
 }

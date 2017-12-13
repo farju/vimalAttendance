@@ -63,4 +63,34 @@
         android:layout_centerHorizontal="true"
         android:visibility="gone"/>
 
+    <EditText
+        android:id="@+id/confirm_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/student_code_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/confirm_code"
+        android:layout_alignStart="@+id/confirm_code"
+        android:layout_marginBottom="14dp"
+        android:text="Enter the confirmation code below:"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/confirm_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/confirm_code"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:text="Attend Class"
+        android:visibility="gone"/>
+
 </RelativeLayout>
