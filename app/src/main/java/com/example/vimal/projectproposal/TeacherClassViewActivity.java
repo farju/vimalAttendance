@@ -3,7 +3,6 @@ package com.example.vimal.projectproposal;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,7 +15,7 @@ public class TeacherClassViewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_teacher_class_view);
+        setContentView(R.layout.classdetails);
         Intent classIntent = getIntent();
         final Class classes = (Class) classIntent.getSerializableExtra("class");
 
@@ -40,6 +39,14 @@ public class TeacherClassViewActivity extends AppCompatActivity {
             });
             b2.setVisibility(View.VISIBLE);
             //TODO Starts attendance event
+            b2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent userIntent = new Intent(TeacherClassViewActivity.this, AttendanceCreation.class);
+                    userIntent.putExtra("class", classes);
+                    startActivity(userIntent);
+                }
+            });
         }
 
     }

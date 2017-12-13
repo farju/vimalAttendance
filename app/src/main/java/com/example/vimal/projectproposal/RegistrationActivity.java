@@ -1,7 +1,6 @@
 package com.example.vimal.projectproposal;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,7 +8,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,8 +19,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.List;
 
 public class RegistrationActivity extends AppCompatActivity implements View.OnClickListener {
     private FirebaseAuth mAuth;
@@ -39,7 +35,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_registration);
+        setContentView(R.layout.registration);
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -94,8 +90,8 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                             try {
                                 mDatabase.child("users").child(userId).setValue(userObject);
                                 if (data != null) {
-                                    Log.d("hello", data);
                                     mDatabase.child("users").child(userId).child("classList").push().setValue(data);
+                                    mDatabase.child("classes").child(data).child("studentList").push().setValue(userId);
                                 }
                             } catch (Exception e) {
                                 Log.e("bad news", e.toString());

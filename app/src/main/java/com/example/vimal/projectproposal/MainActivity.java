@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.login);
         mAuth = FirebaseAuth.getInstance();
 
 
@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         data = intent.getData();
         if (data!= null) {
             tokens = data.toString().split("/");
-            Log.d("token", tokens[3]);
         }
 
 
@@ -146,6 +145,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (data!=null) {
                 Log.d("login", tokens[3]);
                 mDatabase.child("users").child(user.getUid()).child("classList").push().setValue(tokens[3]);
+                //Adds the student to the class's student list
+                mDatabase.child("classes").child(tokens[3]).child("studentList").push().setValue(user.getUid());
             }
             startActivity(loginIntent);
         } else {

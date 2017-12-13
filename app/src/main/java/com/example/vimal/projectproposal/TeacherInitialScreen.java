@@ -4,14 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,9 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * Created by Vimal on 12/3/2017.
@@ -33,7 +31,7 @@ public class TeacherInitialScreen extends AppCompatActivity {
     private DatabaseReference mDatabase;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.teacherviewclass);
+        setContentView(R.layout.classlistview);
         //Receive UID here
         final String UID = (String) getIntent().getSerializableExtra("UID");
 
@@ -112,12 +110,8 @@ public class TeacherInitialScreen extends AppCompatActivity {
     private void renderClasses(final User user) {
 
 
-        RelativeLayout rl=(RelativeLayout)findViewById(R.id.teacherWelcome);
-
-        //TODO Make scrollview and linearlayout inside the xml file and get reference to it for appending
-        ScrollView sv = new ScrollView(TeacherInitialScreen.this);
-        sv.setLayoutParams(new ScrollView.LayoutParams(ScrollView.LayoutParams.WRAP_CONTENT, ScrollView.LayoutParams.WRAP_CONTENT));
-        sv.getPaddingTop();
+        //TODO Still need to make the button next to the textview so might have to use arrayadapter and so on :'(
+        ScrollView sv = (ScrollView) findViewById(R.id.scroll);
         LinearLayout ll = new LinearLayout(TeacherInitialScreen.this);
         ll.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT));
         ll.setOrientation(LinearLayout.VERTICAL);
@@ -167,6 +161,5 @@ public class TeacherInitialScreen extends AppCompatActivity {
                 ll.addView(text);
                 ll.addView(b);
             }
-        rl.addView(sv);
     }
 }

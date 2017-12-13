@@ -30,7 +30,7 @@ public class TeacherAddClass extends AppCompatActivity implements View.OnClickLi
     private String UID;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.firsttimeteacher);
+        setContentView(R.layout.createclass);
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         Cname = (EditText) findViewById(R.id.studentClassName);

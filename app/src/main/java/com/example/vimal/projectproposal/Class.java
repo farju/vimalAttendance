@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -21,9 +22,11 @@ public class Class implements Serializable{
     private String teacher_UID;
     private String class_time;
     private String class_date;
+    private HashMap<String, String> studentList;
 
     public Class() {
         class_name = class_ID = course_code = room_num = teacher_UID = class_time = class_date = "";
+        studentList = new HashMap<String, String>();
     }
 
     public Class(String id, String name, String code, String room, String teacher_id, String time, String date) {
@@ -72,6 +75,10 @@ public class Class implements Serializable{
     }
 
     public String getClass_ID() {return class_ID;}
+
+    public HashMap<String, String> getStudentList() {
+        return studentList;
+    }
 
     /*
 
