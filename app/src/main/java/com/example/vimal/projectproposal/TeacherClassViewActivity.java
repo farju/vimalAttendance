@@ -58,7 +58,6 @@ public class TeacherClassViewActivity extends AppCompatActivity implements Atten
                 }
             });
             b2.setVisibility(View.VISIBLE);
-            //TODO Starts attendance event
             b2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -67,9 +66,6 @@ public class TeacherClassViewActivity extends AppCompatActivity implements Atten
                     DialogFragment dialog = new AttendanceCreation();
                     dialog.setArguments(bund);
                     dialog.show(getFragmentManager(), "attendance");
-                    /*Intent userIntent = new Intent(TeacherClassViewActivity.this, AttendanceCreation_v.class);
-                    userIntent.putExtra("class", classes);
-                    startActivity(userIntent);*/
                 }
             });
 
@@ -92,6 +88,7 @@ public class TeacherClassViewActivity extends AppCompatActivity implements Atten
                     }
                 });
             }
+
             findViewById(R.id.attendance_title).setVisibility(View.VISIBLE);
             ListView students = (ListView) findViewById(R.id.student_list);
             students.setVisibility(View.VISIBLE);
