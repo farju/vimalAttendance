@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private DatabaseReference mDatabase;
     Uri data;
     String[] tokens;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +45,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mUserNameField = (EditText) findViewById(R.id.usernameinput);
         mPasswordField = (EditText) findViewById(R.id.passwordinput);
 
-        Intent intent = getIntent();
-        data = intent.getData();
-        if (data!= null) {
-            tokens = data.toString().split("/");
+        intent = getIntent();
+        if(intent != null){
+            data = intent.getData();
 
-            //TODO: check for class or attendance intent
+            if (data!= null) {
+                tokens = data.toString().split("/");
+            }
         }
 
 
@@ -137,31 +139,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return valid;
     }
 
-    private void updateUI(FirebaseUser user) {
+    private void updateUI(final FirebaseUser user) {
         //hideProgressDialog();
         if (user != null) {
-            mDatabase = FirebaseDatabase.getInstance().getReference();
-
-            Intent loginIntent = new Intent(this, TeacherInitialScreen.class);
-            //package token/uid into intent and send it with setExtra method
-            loginIntent.putExtra("UID", user.getUid());
-
+            //mDatabase = FirebaseDatabase.getInstance().getReference();
             if (data != null) {
 
                 if (tokens[2].equals("attendance")) {
                     System.out.println("attendance");
+                    //get the attendance classID
                     FirebaseDatabase.getInstance().getReference().child("attendance").child(tokens[3]).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            Attendance attendance = dataSnapshot.getValue(Attendance.class);
+                            final Attendance attendance = dataSnapshot.getValue(Attendance.class);
+                            //get the class ID
                             FirebaseDatabase.getInstance().getReference().child("classes").child(attendance.getClassID()).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     System.out.println(tokens[3]);
                                     Class classes = dataSnapshot.getValue(Class.class);
                                     Intent attendance_intent = new Intent(MainActivity.this, TeacherClassViewActivity.class);
+                                    attendance_intent.putExtra("UID", user.getUid());
                                     attendance_intent.putExtra("class", classes);
-                                    attendance_intent.putExtra("attendance ID", tokens[3]);
+                                    attendance_intent.putExtra("attendance_ID", tokens[3]);
                                     startActivity(attendance_intent);
                                 }
 
@@ -182,9 +182,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     mDatabase.child("users").child(user.getUid()).child("classList").push().setValue(tokens[3]);
                     //Adds the student to the class's student list
                     mDatabase.child("classes").child(tokens[3]).child("studentList").push().setValue(user.getUid());
+                    Intent loginIntent = new Intent(this, TeacherInitialScreen.class);
+                    //package token/uid into intent and send it with setExtra method
+                    loginIntent.putExtra("UID", user.getUid());
+
+                    startActivity(loginIntent);
                 }
+            }else {
+
+                Intent loginIntent = new Intent(this, TeacherInitialScreen.class);
+                //package token/uid into intent and send it with setExtra method
+                loginIntent.putExtra("UID", user.getUid());
+
+                startActivity(loginIntent);
             }
-            startActivity(loginIntent);
         } else {
             findViewById(R.id.usernamePasswordLogin).setVisibility(View.VISIBLE);
         }

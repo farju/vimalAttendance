@@ -10,14 +10,14 @@ import java.util.HashMap;
 public class Attendance {
     private String code;
     private String classID;
-    private HashMap<String,String> attendance; // student_id , N/N
+    private HashMap<String,String> attendance_list; // student_id , N/N
 
     public Attendance(){};
 
     public Attendance(String class_, String c){
         classID = class_;
         code = c;
-        attendance = new HashMap<String, String>();
+        attendance_list = new HashMap<String, String>();
     }
 
     public String getCode() {
@@ -25,7 +25,7 @@ public class Attendance {
     }
 
     public HashMap<String, String> getAttendance() {
-        return attendance;
+        return attendance_list;
     }
 
     public String getClassID() {

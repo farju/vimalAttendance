@@ -42,7 +42,7 @@ public class Class implements Serializable{
         class_name = class_ID = course_code = room_num = teacher_UID = class_time = class_date = "";
         studentList = new HashMap<String, String>();
         attendance_open = false;
-        code = null;
+        code = "";
         emailList = "";
     }
 
@@ -54,7 +54,7 @@ public class Class implements Serializable{
         room_num = room;
         teacher_UID = teacher_id;
         class_time = time;
-        code = null;
+        code = "";
         boolean flag = false;
         for (int i = 0; i < days.length; i++) {
             if (date.equals(days[i])) {
@@ -101,6 +101,10 @@ public class Class implements Serializable{
         return studentList;
     }
 
+    public boolean isAttendance_open() {
+        return attendance_open;
+    }
+
     public ArrayList<String> getStudentIDs() {
         ArrayList<String> s = new ArrayList<>();
         Iterator myVeryOwnIterator = studentList.keySet().iterator();
@@ -140,20 +144,26 @@ public class Class implements Serializable{
         return code;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setCode(String c) {
+        this.code = c;
+        FirebaseDatabase.getInstance().getReference().child("classes").child(class_ID).child("code").setValue(c);
     }
 
-    public void start_attendance(){
-        attendance_open = true;
 
-        new CountDownTimer(30000, 1000) { //30 secs  -> 900000 is 15 mins (so vimal says)
+    public void start_attendance(){
+        final DatabaseReference mData = FirebaseDatabase.getInstance().getReference();
+        attendance_open = true;
+        mData.child("classes").child(class_ID).child("attendance_open").setValue(true);
+
+
+        new CountDownTimer(900000, 1000) { //30 secs  -> 900000 is 15 mins (so vimal says)
             public void onTick(long millisUntilFinished) {
             }
             public void onFinish() {
                 attendance_open = false;
+                mData.child("classes").child(class_ID).child("attendance_open").setValue(false);
                 Log.d("end", "timer finished " + attendance_open + " " + code);
-                code = null;
+                setCode("");
             }
         }.start();
 

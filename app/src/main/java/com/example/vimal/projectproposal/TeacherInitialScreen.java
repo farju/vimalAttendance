@@ -29,12 +29,13 @@ import java.util.Iterator;
 
 public class TeacherInitialScreen extends AppCompatActivity {
     private DatabaseReference mDatabase;
+    private String UID_;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.classlistview);
         //Receive UID here
         final String UID = (String) getIntent().getSerializableExtra("UID");
-
+        UID_ = UID;
         //used for instantiating the firebase database
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -146,7 +147,8 @@ public class TeacherInitialScreen extends AppCompatActivity {
                                     public void onClick(View v) {
                                         Intent registerIntent = new Intent(TeacherInitialScreen.this, TeacherClassViewActivity.class);
                                         registerIntent.putExtra("class", classes);
-                                        registerIntent.putExtra("UserType", user.getType());
+                                        registerIntent.putExtra("UID", UID_);
+                                        //registerIntent.putExtra("UserType", user.getType());
                                         startActivity(registerIntent);
                                     }
                                 });

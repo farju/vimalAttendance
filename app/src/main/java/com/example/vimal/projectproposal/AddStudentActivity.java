@@ -40,7 +40,8 @@ public class AddStudentActivity extends AppCompatActivity {
         emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
         emailIntent.putExtra(Intent.EXTRA_CC, CC);
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Adding you to the " + className + " class");
-        emailIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml("Welcome to " + className + ".To join this class please click the link below.<br><a href=\"" + link_val + "\">" + " Join Class " + "</a>") );
+        emailIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml("Welcome to " + className + ".To join this class please click the link below." +
+                "<br><a href=\"" + link_val + "\">" + link_val + "</a>") );
 
         try {
             startActivity(Intent.createChooser(emailIntent, "Send mail..."));
@@ -55,7 +56,7 @@ public class AddStudentActivity extends AppCompatActivity {
         Log.i("Send email", "");
         String emails = classes.getStudentEmails();
         Log.d("Emails", emails);
-        String[] TO = {""}; //student emails
+        String[] TO = {emails}; //student emails
         String[] CC = {""};
         String link_val = "https://attendance/" + AID;
         Intent emailIntent = new Intent(Intent.ACTION_SEND);
