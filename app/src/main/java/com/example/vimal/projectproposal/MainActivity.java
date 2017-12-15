@@ -18,8 +18,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private FirebaseAuth mAuth;
@@ -36,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.login);
         mAuth = FirebaseAuth.getInstance();
 
-
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         mStatusTextView = (TextView) findViewById(R.id.status);
         mUserNameField = (EditText) findViewById(R.id.usernameinput);
         mPasswordField = (EditText) findViewById(R.id.passwordinput);
@@ -47,13 +50,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             tokens = data.toString().split("/");
 
             //TODO: check for class or attendance intent
-            if(tokens[2].equals("attendance")){
-
-                Intent attendance_intent = new Intent(this, TeacherClassViewActivity.class);
-                attendance_intent.putExtra("attendance_class", intent.getSerializableExtra("class"));
-                attendance_intent.putExtra("attendance ID", tokens[3]);
-                startActivity(attendance_intent);
-            }
         }
 
 
@@ -67,8 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onClick(View v) {
                 Intent registerIntent = new Intent(MainActivity.this, RegistrationActivity.class);
                 if (data!=null) {
-                    Log.d("data", tokens[3]);
-                    registerIntent.putExtra("data_", tokens[3]);
+                        registerIntent.putExtra("data_", tokens[3]);
                 }
                 startActivity(registerIntent);
             }
@@ -151,11 +146,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //package token/uid into intent and send it with setExtra method
             loginIntent.putExtra("UID", user.getUid());
 
-            if (data!=null) {
-                Log.d("login", tokens[3]);
-                mDatabase.child("users").child(user.getUid()).child("classList").push().setValue(tokens[3]);
-                //Adds the student to the class's student list
-                mDatabase.child("classes").child(tokens[3]).child("studentList").push().setValue(user.getUid());
+            if (data != null) {
+
+                if (tokens[2].equals("attendance")) {
+                    System.out.println("attendance");
+                    FirebaseDatabase.getInstance().getReference().child("attendance").child(tokens[3]).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Attendance attendance = dataSnapshot.getValue(Attendance.class);
+                            FirebaseDatabase.getInstance().getReference().child("classes").child(attendance.getClassID()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    System.out.println(tokens[3]);
+                                    Class classes = dataSnapshot.getValue(Class.class);
+                                    Intent attendance_intent = new Intent(MainActivity.this, TeacherClassViewActivity.class);
+                                    attendance_intent.putExtra("class", classes);
+                                    attendance_intent.putExtra("attendance ID", tokens[3]);
+                                    startActivity(attendance_intent);
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+                } else {
+                    mDatabase.child("users").child(user.getUid()).child("classList").push().setValue(tokens[3]);
+                    //Adds the student to the class's student list
+                    mDatabase.child("classes").child(tokens[3]).child("studentList").push().setValue(user.getUid());
+                }
             }
             startActivity(loginIntent);
         } else {

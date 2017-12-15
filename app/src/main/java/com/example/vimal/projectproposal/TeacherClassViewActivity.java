@@ -101,22 +101,24 @@ public class TeacherClassViewActivity extends AppCompatActivity implements Atten
             students.setAdapter(adapter);
 
         }else{
-            final EditText code_ = (EditText) findViewById(R.id.confirm_code);
-            Button student_b = (Button) findViewById(R.id.confirm_button);
-            TextView txt = (TextView) findViewById(R.id.student_code_title);
+            if (classIntent.hasExtra("attendance ID")) {
+                final EditText code_ = (EditText) findViewById(R.id.confirm_code);
+                Button student_b = (Button) findViewById(R.id.confirm_button);
+                TextView txt = (TextView) findViewById(R.id.student_code_title);
 
-            code_.setVisibility(View.VISIBLE);
-            student_b.setVisibility(View.VISIBLE);
-            txt.setVisibility(View.VISIBLE);
+                code_.setVisibility(View.VISIBLE);
+                student_b.setVisibility(View.VISIBLE);
+                txt.setVisibility(View.VISIBLE);
 
-            student_b.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(classes.getCode()!= null && code_.getText().toString().equals(classes.getCode())){
-                        //TODO: add student to existing attendance obj
+                student_b.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (classes.getCode() != null && code_.getText().toString().equals(classes.getCode())) {
+                            //TODO: add student to existing attendance obj
+                        }
                     }
-                }
-            });
+                });
+            }
         }
 
 
