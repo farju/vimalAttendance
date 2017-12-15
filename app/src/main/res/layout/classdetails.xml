@@ -45,15 +45,26 @@
         android:text="Start Attendance"
         android:visibility="gone" />
 
+    <Button
+        android:id="@+id/attendance_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/attendance_start"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="Attendance Details"
+        android:visibility="gone" />
+
     <TextView
         android:id="@+id/attendance_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/attendance_start"
-        android:layout_marginTop="14dp"
+        android:layout_below="@+id/attendance_details"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="14dp"
         android:text="Enrolled Students"
-        android:visibility="gone"        />
+        android:visibility="gone" />
+
     <ListView
         android:id="@+id/student_list"
         android:layout_width="match_parent"

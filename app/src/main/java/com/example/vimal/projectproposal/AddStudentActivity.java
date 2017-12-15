@@ -20,7 +20,7 @@ public class AddStudentActivity extends AppCompatActivity {
         classes = (Class) intent.getSerializableExtra("class");
         String classID = (String) classes.getClass_ID();
         String className = (String) classes.getClass_name();
-        Log.d("emails in Add", classes.getStudentEmails());
+        String emails = (String) classes.getEmailList();
         if(intent.hasExtra("attendance_ID")){
             send_invite(intent.getStringExtra("attendance_ID"));
         }else{
@@ -54,7 +54,9 @@ public class AddStudentActivity extends AppCompatActivity {
 
     public void send_invite(String AID){
         Log.i("Send email", "");
-        String emails = classes.getStudentEmails();
+
+        //TODO still have to figure out how to pull all the email addresses for the students here
+        String emails = classes.getEmailList();
         Log.d("Emails", emails);
         String[] TO = {emails}; //student emails
         String[] CC = {""};

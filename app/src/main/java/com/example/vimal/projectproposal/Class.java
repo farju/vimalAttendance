@@ -1,13 +1,19 @@
 package com.example.vimal.projectproposal;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.CountDownTimer;
 import android.util.Log;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import org.w3c.dom.Text;
 
 import java.io.Serializable;
 import java.sql.Time;
@@ -105,6 +111,15 @@ public class Class implements Serializable{
         return attendance_open;
     }
 
+    public void setAttendance_open(boolean attendance_open) {
+        this.attendance_open = attendance_open;
+    }
+
+    public void setEmailList(String email) {
+        emailList += email + ";";
+        System.out.println("setEmailList is being called for: " + emailList);
+    }
+
     public ArrayList<String> getStudentIDs() {
         ArrayList<String> s = new ArrayList<>();
         Iterator myVeryOwnIterator = studentList.keySet().iterator();
@@ -116,7 +131,7 @@ public class Class implements Serializable{
         return s;
     }
 
-    public String getStudentEmails(){
+    public void addStudentEmails(){
         //final String s = "";
         Iterator myVeryOwnIterator = studentList.keySet().iterator();
         DatabaseReference mData = FirebaseDatabase.getInstance().getReference();
@@ -129,7 +144,8 @@ public class Class implements Serializable{
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     User user = dataSnapshot.getValue(User.class);
-                    emailList = emailList + user.getEmail() + ";";
+                    System.out.println("User email: " + user.getEmail());
+                    setEmailList(user.getEmail());
                 }
 
                 @Override
@@ -138,7 +154,7 @@ public class Class implements Serializable{
                 }
             });
         }
-        return emailList;
+
     }
     public String getCode() {
         return code;
@@ -149,23 +165,28 @@ public class Class implements Serializable{
         FirebaseDatabase.getInstance().getReference().child("classes").child(class_ID).child("code").setValue(c);
     }
 
-
-    public void start_attendance(){
+    //Had to move this to TeacherClassViewActivity.java since cannot communicate with the activity properly
+/*
+    public void start_attendance(final Context c){
         final DatabaseReference mData = FirebaseDatabase.getInstance().getReference();
         attendance_open = true;
         mData.child("classes").child(class_ID).child("attendance_open").setValue(true);
 
-
-        new CountDownTimer(900000, 1000) { //30 secs  -> 900000 is 15 mins (so vimal says)
+        new CountDownTimer(3000, 1000) { //30 secs  -> 900000 is 15 mins (so vimal says)
             public void onTick(long millisUntilFinished) {
             }
             public void onFinish() {
                 attendance_open = false;
                 mData.child("classes").child(class_ID).child("attendance_open").setValue(false);
-                Log.d("end", "timer finished " + attendance_open + " " + code);
+                Toast.makeText(c, "timer finished for the attendance event!", Toast.LENGTH_LONG).show();
                 setCode("");
             }
         }.start();
+    }
+*/
+    public String getEmailList() {
+        System.out.println("Final email list: " + emailList);
+        return emailList;
 
     }
 

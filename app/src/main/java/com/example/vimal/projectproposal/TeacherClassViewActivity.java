@@ -1,8 +1,10 @@
 package com.example.vimal.projectproposal;
 
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
@@ -137,10 +139,10 @@ public class TeacherClassViewActivity extends AppCompatActivity implements Atten
                                 Toast.makeText(TeacherClassViewActivity.this,classes.getCode(),Toast.LENGTH_LONG).show();
                                 if (classes.getCode() != null && code_.getText().toString().equals(classes.getCode())) {
                                     if(classes.isAttendance_open()){
-                                        //TODO: add student to existing attendance obj
                                         String A_key = mDatabase.child("attendance").child(AID).child("attendance_list").push().getKey();
                                         mDatabase.child("attendance").child(AID).child("attendance_list").child(A_key).setValue(UID);
                                         Toast.makeText(TeacherClassViewActivity.this,"You're Here!",Toast.LENGTH_LONG).show();
+                                        //TODO have to decide whether we want to show a successful attendance screen to the student (optional)
 
                                     }else{
                                         Toast.makeText(TeacherClassViewActivity.this,"You missed the window of opportunity to attend this class.",Toast.LENGTH_LONG).show();
@@ -184,21 +186,50 @@ public class TeacherClassViewActivity extends AppCompatActivity implements Atten
 
     public void onDialogPositiveClick(DialogFragment dialog, String code){
         classes.setCode(code);
+        classes.addStudentEmails();
         //
         Attendance attendance = new Attendance(classes.getClass_ID(), classes.getCode());
         // push attendance obj to firebase
-        String AID = mDatabase.child("attendance").push().getKey();
+        final String AID = mDatabase.child("attendance").push().getKey();
         mDatabase.child("attendance").child(AID).setValue(attendance);
-
-        System.out.println("hello " + classes.getStudentEmails());
         //send_invite(AID);
-        classes.start_attendance();
+        start_attendance(classes, AID);
 
         Intent userIntent = new Intent(TeacherClassViewActivity.this, AddStudentActivity.class);
         userIntent.putExtra("class", classes);
         userIntent.putExtra("attendance_ID", AID);
         startActivity(userIntent);
 
+    }
+
+    public void start_attendance(final Class c, final String AID){
+        final DatabaseReference mData = FirebaseDatabase.getInstance().getReference();
+        c.setAttendance_open(true);
+        mData.child("classes").child(c.getClass_ID()).child("attendance_open").setValue(true);
+
+        new CountDownTimer(60000, 1000) { //30 secs  -> 900000 is 15 mins (so vimal says)
+            public void onTick(long millisUntilFinished) {
+            }
+            public void onFinish() {
+                c.setAttendance_open(false);
+                mData.child("classes").child(c.getClass_ID()).child("attendance_open").setValue(false);
+                Toast.makeText(TeacherClassViewActivity.this , "timer finished for the attendance event!", Toast.LENGTH_LONG).show();
+                c.setCode("");
+
+                Button attendanceButton = (Button) findViewById(R.id.attendance_details);
+                attendanceButton.setVisibility(View.VISIBLE);
+
+                attendanceButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent registerIntent = new Intent(TeacherClassViewActivity.this, AttendanceDetails.class);
+                        registerIntent.putExtra("message", "The attendance is closed! The list of students that successfully attended are shown below.");
+                        registerIntent.putExtra("attendance_ID", AID);
+                        startActivity(registerIntent);
+                    }
+                });
+            }
+        }.start();
     }
 
 
