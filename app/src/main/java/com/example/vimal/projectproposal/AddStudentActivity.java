@@ -9,7 +9,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 public class AddStudentActivity extends AppCompatActivity {
-
+    Class classes;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,12 +17,15 @@ public class AddStudentActivity extends AppCompatActivity {
         //changed layout since it doesnt render any specific screen at runtime
 
         Intent intent = getIntent();
-        Class classes = (Class) intent.getSerializableExtra("class");
+        classes = (Class) intent.getSerializableExtra("class");
         String classID = (String) classes.getClass_ID();
         String className = (String) classes.getClass_name();
-        sendEmail(classID, className);
-
-
+        Log.d("emails in Add", classes.getStudentEmails());
+        if(intent.hasExtra("attendance_ID")){
+            send_invite(intent.getStringExtra("attendance_ID"));
+        }else{
+            sendEmail(classID, className);
+        }
     }
 
     private void sendEmail(String classID, String className) {
@@ -37,7 +40,33 @@ public class AddStudentActivity extends AppCompatActivity {
         emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
         emailIntent.putExtra(Intent.EXTRA_CC, CC);
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Adding you to the " + className + " class");
-        emailIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml("Welcome to " + className + ".To join this class please click the link below.<br><a href=\"" + link_val + "\">Join class</a>") );
+        emailIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml("Welcome to " + className + ".To join this class please click the link below.<br><a href=\"" + link_val + "\">" + " Join Class " + "</a>") );
+
+        try {
+            startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+            finish();
+            Log.i("Finished sending email", "");
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(AddStudentActivity.this, "There is no email client installed.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void send_invite(String AID){
+        Log.i("Send email", "");
+        String emails = classes.getStudentEmails();
+        Log.d("Emails", emails);
+        String[] TO = {""}; //student emails
+        String[] CC = {""};
+        String link_val = "https://attendance/" + AID;
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+
+        emailIntent.setData(Uri.parse("mailto:"));
+        emailIntent.setType("text/html");
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
+        emailIntent.putExtra(Intent.EXTRA_CC, CC);
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Attendance open for " + classes.getClass_name());
+        emailIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml("Attendance is open for this class. You have a limited time to confirm your presence. " +
+                "Click the link below and enter the confirmation code: <br><a href=\"" + link_val + "\">" + link_val + "</a>") );
 
         try {
             startActivity(Intent.createChooser(emailIntent, "Send mail..."));

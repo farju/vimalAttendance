@@ -25,7 +25,7 @@ import java.util.Random;
 public class AttendanceCreation extends DialogFragment {
 
     public interface SetLimitDialogListener {
-        public void onDialogPositiveClick(DialogFragment dialog);
+        public void onDialogPositiveClick(DialogFragment dialog, String code);
     }
 
     SetLimitDialogListener mListener;
@@ -60,14 +60,14 @@ public class AttendanceCreation extends DialogFragment {
 
         text.setText("Started at " + time + " For " + c.getClass_name());
 
-        String value = generateCode();
+        final String value = generateCode();
         text2.setText(value);
         builder.setView(view);
-        c.setCode(value);
+        //c.setCode(value);
         builder.setPositiveButton("Take Attendance", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 Log.d("Dialog", "Button clicked");
-                mListener.onDialogPositiveClick(AttendanceCreation.this);
+                mListener.onDialogPositiveClick(AttendanceCreation.this, value);
             }
         });
         // Create the AlertDialog object and return it

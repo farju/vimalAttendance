@@ -45,6 +45,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         data = intent.getData();
         if (data!= null) {
             tokens = data.toString().split("/");
+
+            //TODO: check for class or attendance intent
+            if(tokens[2].equals("attendance")){
+
+                Intent attendance_intent = new Intent(this, TeacherClassViewActivity.class);
+                attendance_intent.putExtra("attendance_class", intent.getSerializableExtra("class"));
+                attendance_intent.putExtra("attendance ID", tokens[3]);
+                startActivity(attendance_intent);
+            }
         }
 
 

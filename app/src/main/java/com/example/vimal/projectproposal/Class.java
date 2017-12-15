@@ -3,6 +3,12 @@ package com.example.vimal.projectproposal;
 import android.os.CountDownTimer;
 import android.util.Log;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.io.Serializable;
 import java.sql.Time;
 import java.text.ParseException;
@@ -29,6 +35,7 @@ public class Class implements Serializable{
     private HashMap<String, String> studentList;
     private boolean attendance_open;
     private String code;
+    private String emailList;
     //private ArrayList<Attendance> attendance;
 
     public Class() {
@@ -36,6 +43,7 @@ public class Class implements Serializable{
         studentList = new HashMap<String, String>();
         attendance_open = false;
         code = null;
+        emailList = "";
     }
 
     public Class(String id, String name, String code, String room, String teacher_id, String time, String date) {
@@ -59,6 +67,8 @@ public class Class implements Serializable{
         if (!flag) {
             class_date = "";
         }
+        studentList = new HashMap<String, String>();
+        emailList = "";
         //figure out how to parse this data
     }
     public String getCourse_code() {
@@ -102,6 +112,30 @@ public class Class implements Serializable{
         return s;
     }
 
+    public String getStudentEmails(){
+        //final String s = "";
+        Iterator myVeryOwnIterator = studentList.keySet().iterator();
+        DatabaseReference mData = FirebaseDatabase.getInstance().getReference();
+
+        while (myVeryOwnIterator.hasNext()) {
+            String key = (String) myVeryOwnIterator.next();//.next();
+            //s.add(studentList.get(key));
+            String val = studentList.get(key);
+            FirebaseDatabase.getInstance().getReference().child("users").child(val).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    User user = dataSnapshot.getValue(User.class);
+                    emailList = emailList + user.getEmail() + ";";
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+        return emailList;
+    }
     public String getCode() {
         return code;
     }
@@ -112,7 +146,7 @@ public class Class implements Serializable{
 
     public void start_attendance(){
         attendance_open = true;
-        //TODO:code logic to record student attendance
+
         new CountDownTimer(30000, 1000) { //30 secs  -> 900000 is 15 mins (so vimal says)
             public void onTick(long millisUntilFinished) {
             }

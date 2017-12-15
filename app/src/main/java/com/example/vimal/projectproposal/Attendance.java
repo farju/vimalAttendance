@@ -10,21 +10,21 @@ import java.util.HashMap;
 public class Attendance {
     private String code;
     private String classID;
-    private ArrayList<String> attendance; // student_id , N/N
+    private HashMap<String,String> attendance; // student_id , N/N
 
     public Attendance(){};
 
     public Attendance(String class_, String c){
         classID = class_;
         code = c;
-        attendance = new ArrayList<String>();
+        attendance = new HashMap<String, String>();
     }
 
     public String getCode() {
         return code;
     }
 
-    public ArrayList<String> getAttendance() {
+    public HashMap<String, String> getAttendance() {
         return attendance;
     }
 
@@ -32,7 +32,6 @@ public class Attendance {
         return classID;
     }
 
-    public void add_attendance_record(String Student_ID) {
-        attendance.add(Student_ID);
-    }
+    //public void add_attendance_record(String Student_ID) {attendance.add(Student_ID);}
+
 }

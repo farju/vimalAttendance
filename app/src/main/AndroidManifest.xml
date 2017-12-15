@@ -24,12 +24,17 @@
                     android:host="class"
                     android:pathPattern=".*"
                     />
+                <data android:scheme="https"
+                    android:host="attendance"
+                    android:pathPattern=".*"
+                    />
             </intent-filter>
         </activity>
         <activity android:name=".RegistrationActivity" />
         <activity android:name=".TeacherInitialScreen" />
         <activity android:name=".TeacherAddClass" />
-        <activity android:name=".TeacherClassViewActivity" />
+        <activity android:name=".TeacherClassViewActivity" >
+        </activity>
         <activity android:name=".AddStudentActivity"/>
     </application>
 

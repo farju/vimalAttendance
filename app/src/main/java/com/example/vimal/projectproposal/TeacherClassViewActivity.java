@@ -2,8 +2,10 @@ package com.example.vimal.projectproposal;
 
 import android.app.DialogFragment;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -28,6 +31,8 @@ public class TeacherClassViewActivity extends AppCompatActivity implements Atten
     ArrayAdapter<String> adapter;
     Class classes;
     Attendance attendance;
+    DatabaseReference mDatabase;
+    boolean flag;
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +41,9 @@ public class TeacherClassViewActivity extends AppCompatActivity implements Atten
         Intent classIntent = getIntent();
         classes = (Class) classIntent.getSerializableExtra("class");
         final ArrayList<String> student_names = new ArrayList<String>();
-        DatabaseReference mDatabase;
         mDatabase = FirebaseDatabase.getInstance().getReference();
         TextView name = (TextView) findViewById(R.id.classDetailstext);
+        flag = false;
 
         name.setText("Class Name: " + classes.getClass_name() + "\nCourse Code: " + classes.getCourse_code() + "\nRoom Number: " + classes.getRoom_num() + "\nClass Time: " + classes.getClass_time() + "\nDay of the Week: " + classes.getClass_date());
 
@@ -96,7 +101,6 @@ public class TeacherClassViewActivity extends AppCompatActivity implements Atten
             students.setAdapter(adapter);
 
         }else{
-            //TODO: set input text for student to confirm attendance
             final EditText code_ = (EditText) findViewById(R.id.confirm_code);
             Button student_b = (Button) findViewById(R.id.confirm_button);
             TextView txt = (TextView) findViewById(R.id.student_code_title);
@@ -140,12 +144,26 @@ public class TeacherClassViewActivity extends AppCompatActivity implements Atten
         }
     }
 
-    public void onDialogPositiveClick(DialogFragment dialog){
-
-        //TODO: send notifications to all students in the class list and create attendance object with empty attendance list
+    public void onDialogPositiveClick(DialogFragment dialog, String code){
+        classes.setCode(code);
+        //
+        Attendance attendance = new Attendance(classes.getClass_ID(), classes.getCode());
         // push attendance obj to firebase
-        attendance = new Attendance("", "");
+        String AID = mDatabase.child("attendance").push().getKey();
+        mDatabase.child("attendance").child(AID).setValue(attendance);
+
+        System.out.println("hello " + classes.getStudentEmails());
+        //send_invite(AID);
         classes.start_attendance();
+
+        Intent userIntent = new Intent(TeacherClassViewActivity.this, AddStudentActivity.class);
+        userIntent.putExtra("class", classes);
+        userIntent.putExtra("attendance_ID", AID);
+        startActivity(userIntent);
+
     }
+
+
+
 
 }
