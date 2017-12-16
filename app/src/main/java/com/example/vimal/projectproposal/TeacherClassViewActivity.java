@@ -210,7 +210,7 @@ public class TeacherClassViewActivity extends AppCompatActivity implements Atten
         c.setAttendance_open(true);
         mData.child("classes").child(c.getClass_ID()).child("attendance_open").setValue(true);
 
-        new CountDownTimer(60000, 1000) { //30 secs  -> 900000 is 15 mins (so vimal says)
+        new CountDownTimer(3000, 1000) { //30 secs  -> 900000 is 15 mins (so vimal says)
             public void onTick(long millisUntilFinished) {
             }
             public void onFinish() {

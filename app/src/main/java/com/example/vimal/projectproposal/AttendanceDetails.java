@@ -3,6 +3,7 @@ package com.example.vimal.projectproposal;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -30,34 +31,35 @@ public class AttendanceDetails extends AppCompatActivity {
 
         String AID = intent.getStringExtra("attendance_ID");
         addStudents(AID);
+        Log.d("AID in atendance", AID);
 
-    }
-
-    public void addStudents(String AID) {
-        final LinearLayout ll = (LinearLayout) findViewById(R.id.attendance_student_list);
         FirebaseDatabase.getInstance().getReference().child("attendance").child(AID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                final LinearLayout ll = (LinearLayout) findViewById(R.id.attendance_student_list);
                 Attendance attendance = dataSnapshot.getValue(Attendance.class);
-                Iterator myVeryOwnIterator = attendance.getAttendance().keySet().iterator();
+                Log.d("atendance obj", attendance.getClassID());
+                if(attendance.getAttendance() != null){
+                    Iterator myVeryOwnIterator = attendance.getAttendance().keySet().iterator();
 
-                while (myVeryOwnIterator.hasNext()) {
-                    final TextView studentName = new TextView(AttendanceDetails.this);
-                    String key = (String) myVeryOwnIterator.next();
-                    String studentID = (String) attendance.getAttendance().get(key);
+                    while (myVeryOwnIterator.hasNext()) {
+                        final TextView studentName = new TextView(AttendanceDetails.this);
+                        String key = (String) myVeryOwnIterator.next();
+                        String studentID = (String) attendance.getAttendance().get(key);
 
-                    FirebaseDatabase.getInstance().getReference().child("users").child(studentID).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            User user = dataSnapshot.getValue(User.class);
-                            studentName.setText(user.toString());
-                        }
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
+                        FirebaseDatabase.getInstance().getReference().child("users").child(studentID).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                User user = dataSnapshot.getValue(User.class);
+                                studentName.setText(user.toString());
+                            }
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
 
-                        }
-                    });
-                    ll.addView(studentName);
+                            }
+                        });
+                        ll.addView(studentName);
+                    }
                 }
             }
 
@@ -66,5 +68,10 @@ public class AttendanceDetails extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void addStudents(String AID) {
+
+
     }
 }
