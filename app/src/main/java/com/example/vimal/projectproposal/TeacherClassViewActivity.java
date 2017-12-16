@@ -136,8 +136,8 @@ public class TeacherClassViewActivity extends AppCompatActivity implements Atten
                         student_b.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Toast.makeText(TeacherClassViewActivity.this,classes.getCode(),Toast.LENGTH_LONG).show();
-                                if (classes.getCode() != null && code_.getText().toString().equals(classes.getCode())) {
+                               // Toast.makeText(TeacherClassViewActivity.this,classes.getCode(),Toast.LENGTH_LONG).show();
+                                if (!classes.getCode().equals("") && code_.getText().toString().equals(classes.getCode())) {
                                     if(classes.isAttendance_open()){
                                         String A_key = mDatabase.child("attendance").child(AID).child("attendance_list").push().getKey();
                                         mDatabase.child("attendance").child(AID).child("attendance_list").child(A_key).setValue(UID);
@@ -147,6 +147,9 @@ public class TeacherClassViewActivity extends AppCompatActivity implements Atten
                                     }else{
                                         Toast.makeText(TeacherClassViewActivity.this,"You missed the window of opportunity to attend this class.",Toast.LENGTH_LONG).show();
                                     }
+
+                                }else{
+                                    Toast.makeText(TeacherClassViewActivity.this,"Code is inccorect.",Toast.LENGTH_LONG).show();
                                 }
                             }
                         });
@@ -186,7 +189,7 @@ public class TeacherClassViewActivity extends AppCompatActivity implements Atten
 
     public void onDialogPositiveClick(DialogFragment dialog, String code){
         classes.setCode(code);
-        classes.addStudentEmails();
+        //classes.addStudentEmails();
         //
         Attendance attendance = new Attendance(classes.getClass_ID(), classes.getCode());
         // push attendance obj to firebase

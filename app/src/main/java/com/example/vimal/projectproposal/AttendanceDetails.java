@@ -28,10 +28,13 @@ public class AttendanceDetails extends AppCompatActivity {
         TextView text = (TextView) findViewById(R.id.attendanceMessage);
         text.setText(intent.getStringExtra("message"));
 
-        final LinearLayout ll = (LinearLayout) findViewById(R.id.attendance_student_list);
-
         String AID = intent.getStringExtra("attendance_ID");
+        addStudents(AID);
 
+    }
+
+    public void addStudents(String AID) {
+        final LinearLayout ll = (LinearLayout) findViewById(R.id.attendance_student_list);
         FirebaseDatabase.getInstance().getReference().child("attendance").child(AID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -49,11 +52,11 @@ public class AttendanceDetails extends AppCompatActivity {
                             User user = dataSnapshot.getValue(User.class);
                             studentName.setText(user.toString());
                         }
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
-                            }
-                        });
+                        }
+                    });
                     ll.addView(studentName);
                 }
             }
@@ -63,6 +66,5 @@ public class AttendanceDetails extends AppCompatActivity {
 
             }
         });
-
     }
 }

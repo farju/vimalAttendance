@@ -180,8 +180,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 } else {
                     mDatabase.child("users").child(user.getUid()).child("classList").push().setValue(tokens[3]);
-                    //Adds the student to the class's student list
+
                     mDatabase.child("classes").child(tokens[3]).child("studentList").push().setValue(user.getUid());
+                    mDatabase.child("classes").child(tokens[3]).child("studentEmails").push().setValue(user.getEmail());
                     Intent loginIntent = new Intent(this, TeacherInitialScreen.class);
                     //package token/uid into intent and send it with setExtra method
                     loginIntent.putExtra("UID", user.getUid());

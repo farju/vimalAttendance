@@ -41,7 +41,7 @@ public class Class implements Serializable{
     private HashMap<String, String> studentList;
     private boolean attendance_open;
     private String code;
-    private String emailList;
+    private HashMap<String,String> studentEmails;
     //private ArrayList<Attendance> attendance;
 
     public Class() {
@@ -49,7 +49,7 @@ public class Class implements Serializable{
         studentList = new HashMap<String, String>();
         attendance_open = false;
         code = "";
-        emailList = "";
+        studentEmails = new HashMap<String, String>();
     }
 
     public Class(String id, String name, String code, String room, String teacher_id, String time, String date) {
@@ -74,7 +74,7 @@ public class Class implements Serializable{
             class_date = "";
         }
         studentList = new HashMap<String, String>();
-        emailList = "";
+        studentEmails = new HashMap<String, String>();
         //figure out how to parse this data
     }
     public String getCourse_code() {
@@ -115,10 +115,10 @@ public class Class implements Serializable{
         this.attendance_open = attendance_open;
     }
 
-    public void setEmailList(String email) {
+ /*   public void setEmailList(String email) {
         emailList += email + ";";
         System.out.println("setEmailList is being called for: " + emailList);
-    }
+    }*/
 
     public ArrayList<String> getStudentIDs() {
         ArrayList<String> s = new ArrayList<>();
@@ -126,36 +126,45 @@ public class Class implements Serializable{
         while (myVeryOwnIterator.hasNext()) {
             String key = (String) myVeryOwnIterator.next();
             s.add(studentList.get(key));
-            }
+        }
 
         return s;
     }
-
-    public void addStudentEmails(){
-        //final String s = "";
-        Iterator myVeryOwnIterator = studentList.keySet().iterator();
-        DatabaseReference mData = FirebaseDatabase.getInstance().getReference();
+    public String Emails() {
+        String e = "";
+        Iterator myVeryOwnIterator = studentEmails.keySet().iterator();
 
         while (myVeryOwnIterator.hasNext()) {
             String key = (String) myVeryOwnIterator.next();//.next();
-            //s.add(studentList.get(key));
-            String val = studentList.get(key);
-            FirebaseDatabase.getInstance().getReference().child("users").child(val).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    User user = dataSnapshot.getValue(User.class);
-                    System.out.println("User email: " + user.getEmail());
-                    setEmailList(user.getEmail());
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
+            e = e + studentEmails.get(key) + ";";
         }
-
+        return e;
     }
+    /*   public void addStudentEmails(){
+           //final String s = "";
+           Iterator myVeryOwnIterator = studentList.keySet().iterator();
+           DatabaseReference mData = FirebaseDatabase.getInstance().getReference();
+
+           while (myVeryOwnIterator.hasNext()) {
+               String key = (String) myVeryOwnIterator.next();//.next();
+               //s.add(studentList.get(key));
+               String val = studentList.get(key);
+               FirebaseDatabase.getInstance().getReference().child("users").child(val).addListenerForSingleValueEvent(new ValueEventListener() {
+                   @Override
+                   public void onDataChange(DataSnapshot dataSnapshot) {
+                       User user = dataSnapshot.getValue(User.class);
+                       System.out.println("User email: " + user.getEmail());
+                       setEmailList(user.getEmail());
+                   }
+
+                   @Override
+                   public void onCancelled(DatabaseError databaseError) {
+
+                   }
+               });
+           }
+
+       }*/
     public String getCode() {
         return code;
     }
@@ -184,15 +193,22 @@ public class Class implements Serializable{
         }.start();
     }
 */
-    public String getEmailList() {
+   /* public String getEmailList() {
         System.out.println("Final email list: " + emailList);
         return emailList;
 
-    }
+    }*/
 
-    /*
+/*
 
-    public List<User> getStudentList() {
-        return studentList;
+    public List<String> getStudentListID() {
+        ArrayList<String> e = new ArrayList<>();
+        Iterator myVeryOwnIterator = studentList.keySet().iterator();
+
+        while (myVeryOwnIterator.hasNext()) {
+            String key = (String) myVeryOwnIterator.next();//.next();
+            e.add(studentList.get(key));
+        }
+        return e;
     }*/
 }

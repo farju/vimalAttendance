@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/ProjectProposal.iml" filepath="$PROJECT_DIR$/ProjectProposal.iml" />
       <module fileurl="file://C:\Users\Mera\AndroidStudioProjects\Universal-Attendance\ProjectProposal.iml" filepath="C:\Users\Mera\AndroidStudioProjects\Universal-Attendance\ProjectProposal.iml" />
+      <module fileurl="file://C:\Users\Vimal\AndroidStudioProjects\Universal-Attendance\ProjectProposal.iml" filepath="C:\Users\Vimal\AndroidStudioProjects\Universal-Attendance\ProjectProposal.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Universal-Attendance.iml" filepath="$PROJECT_DIR$/Universal-Attendance.iml" />
       <module fileurl="file://C:\Users\Vimal\AndroidStudioProjects\ProjectProposal\Universal-Attendance.iml" filepath="C:\Users\Vimal\AndroidStudioProjects\ProjectProposal\Universal-Attendance.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>

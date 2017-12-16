@@ -92,6 +92,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                                 if (data != null) {
                                     mDatabase.child("users").child(userId).child("classList").push().setValue(data);
                                     mDatabase.child("classes").child(data).child("studentList").push().setValue(userId);
+                                    mDatabase.child("classes").child(data).child("studentEmails").push().setValue(user.getEmail());
                                 }
                             } catch (Exception e) {
                                 Log.e("bad news", e.toString());
